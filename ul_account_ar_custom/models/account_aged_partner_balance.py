@@ -34,11 +34,34 @@ class AccountAgedReceivableReportHandler(models.AbstractModel):
         # Inject extra WHERE conditions via forced_domain before calling super
         extra_domain = []
 
+        if not self.env.user.has_group('account.group_account_manager'):
+            extra_domain.append(('partner_id.user_id', '=', self.env.uid))
+
         if options.get('ar_sales_rep_ids'):
             extra_domain.append(('move_id.invoice_user_id', 'in', options['ar_sales_rep_ids']))
 
         if options.get('ar_branch_ids'):
             extra_domain.append(('company_id', 'in', options['ar_branch_ids']))
+
+        if extra_domain:
+            # Temporarily extend forced_domain so the base query picks it up
+            original_forced_domain = options.get('forced_domain', [])
+            options = {**options, 'forced_domain': original_forced_domain + extra_domain}
+
+        return super()._aged_partner_report_custom_engine_common(
+            options, internal_type, current_groupby, next_groupby,
+            offset=offset, limit=limit,
+        )
+
+
+class AccountAgedPayableReportHandler(models.AbstractModel):
+    _inherit = 'account.aged.payable.report.handler'
+
+    def _aged_partner_report_custom_engine_common(self, options, internal_type, current_groupby, next_groupby, offset=0, limit=None):
+        extra_domain = []
+
+        if not self.env.user.has_group('account.group_account_manager'):
+            extra_domain.append(('partner_id.user_id', '=', self.env.uid))
 
         if extra_domain:
             # Temporarily extend forced_domain so the base query picks it up
