@@ -8,6 +8,7 @@
         'data/aged_receivable_due_date_column.xml',
         'views/res_config_settings_view.xml',
         'views/product_template_views.xml',
+        'views/product_catalog_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
