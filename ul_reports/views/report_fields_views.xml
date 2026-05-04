@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Account Move Form View -->
+        <record id="view_move_form_ul_reports" model="ir.ui.view">
+            <field name="name">account.move.form.ul.reports</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='ref']" position="after">
+                    <field name="ul_location"/>
+                    <field name="ul_ship_via"/>
+                    <field name="ul_account_no"/>
+                    <field name="ul_other_info"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Sale Order Form View -->
+        <record id="view_order_form_ul_reports" model="ir.ui.view">
+            <field name="name">sale.order.form.ul.reports</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="ul_account_no"/>
+                    <field name="ul_location"/>
+                    <field name="ul_ship_via"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Purchase Order Form View -->
+        <record id="purchase_order_form_ul_reports" model="ir.ui.view">
+            <field name="name">purchase.order.form.ul.reports</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name="ul_account_no"/>
+                    <field name="ul_ship_via"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

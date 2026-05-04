@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================= PAPER FORMAT ================= -->
+    <record id="paperformat_ul_distributors_invoice" model="report.paperformat">
+        <field name="name">UL Distributors Invoice Paperformat</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">15</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">15</field>
+        <field name="margin_right">15</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- ================= REPORT ACTION ================= -->
+    <record id="action_report_ul_distributors_invoice" model="ir.actions.report">
+        <field name="name">UL Distributors Invoice</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ul_reports.report_ul_distributors_invoice</field>
+        <field name="report_file">ul_reports.report_ul_distributors_invoice</field>
+        <field name="print_report_name">'Distributors Invoice - %s' % (object.name)</field>
+        <field name="paperformat_id" ref="ul_reports.paperformat_ul_distributors_invoice"/>
+    </record>
+
+    <!-- ================= STYLES ================= -->
+    <template id="report_ul_shared_styles">
+        <style>
+            .page { font-family: Arial; font-size: 12px; }
+
+            .title-document {
+                font-size: 28px;
+                font-weight: bold;
+                text-align: right;
+                color: #1f4e79;
+            }
+
+            .slogan-blue {
+                color: #d32f2f;
+                font-weight: bold;
+            }
+
+            .blue-border-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .blue-border-table th {
+                background: #1f4e79;
+                color: #fff;
+                padding: 6px;
+                font-size: 11px;
+            }
+
+            .blue-border-table td {
+                padding: 6px;
+                border: 1px solid #ccc;
+                font-size: 11px;
+            }
+
+            .totals-table {
+                width: 40%;
+                float: right;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            .totals-table th {
+                background: #1f4e79;
+                color: white;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .totals-table td {
+                text-align: right;
+                padding: 8px;
+                border: 1px solid #ccc;
+            }
+
+            .text-right { text-align: right; }
+            .text-center { text-align: center; }
+        </style>
+    </template>
+
+    <!-- ================= DOCUMENT ================= -->
+    <template id="report_ul_distributors_invoice_document">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-call="ul_reports.report_ul_shared_styles"/>
+
+                <!-- HEADER -->
+                <div class="row" style="margin-bottom: 30px;">
+                    <div class="col-6">
+                        <img t-if="o.company_id.logo"
+                             t-att-src="image_data_uri(o.company_id.logo)"
+                             style="max-height: 85px;"/>
+
+                        <div class="slogan-blue">Where quality meets expectation!</div>
+
+                        <div>
+                            <div t-if="o.company_id.street"><t t-esc="o.company_id.street"/></div>
+                            <div t-if="o.company_id.city"><t t-esc="o.company_id.city"/></div>
+                            <div t-if="o.company_id.phone">Ph: <t t-esc="o.company_id.phone"/></div>
+                            <div t-if="o.company_id.email">E: <t t-esc="o.company_id.email"/></div>
+                            <div t-if="o.company_id.vat">GCT#: <t t-esc="o.company_id.vat"/></div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="title-document">INVOICE</div>
+
+                        <table class="blue-border-table" style="width: 75%; float:right;">
+                            <tr>
+                                <th>ACCOUNT NO.</th>
+                                <td class="text-center"><t t-esc="o.partner_id.ref or ''"/></td>
+                            </tr>
+                            <tr>
+                                <th>DATE</th>
+                                <td class="text-center"><span t-field="o.invoice_date"/></td>
+                            </tr>
+                            <tr>
+                                <th>TRANSACTION NO.</th>
+                                <td class="text-center"><t t-esc="o.name"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CUSTOMER -->
+                <div class="row" style="margin-bottom: 30px;">
+                    <div class="col-6">
+                        <strong>Bill To</strong>
+                        <div t-field="o.partner_id"
+                             t-options='{"widget":"contact","fields":["name","address"],"no_marker":True}'/>
+                    </div>
+
+                    <div class="col-6">
+                        <strong>Ship To</strong>
+                        <div t-field="o.partner_shipping_id"
+                             t-options='{"widget":"contact","fields":["name","address","phone"],"no_marker":True}'/>
+                    </div>
+                </div>
+
+                <!-- INFO TABLE WITH OTHER INFO -->
+                <table class="blue-border-table">
+                    <tr>
+                        <th>P.O. NUMBER</th>
+                        <th>LOCATION</th>
+                        <th>REP</th>
+                        <th>INVOICE TERMS</th>
+                        <th>DUE DATE</th>
+                        <th>SHIP VIA</th>
+                        <th>OTHER INFO</th>
+                    </tr>
+                    <tr>
+                        <td><t t-esc="o.ref or ''"/></td>
+                        <td><t t-esc="o.ul_location or ''"/></td>
+                        <td><t t-esc="o.invoice_user_id.name or ''"/></td>
+                        <td><t t-esc="o.invoice_payment_term_id.name or ''"/></td>
+                        <td><span t-field="o.invoice_date_due"/></td>
+                        <td><t t-esc="o.ul_ship_via or ''"/></td>
+                        <td><t t-esc="o.ul_other_info or ''"/></td>
+                    </tr>
+                </table>
+
+                <!-- PRODUCTS -->
+                <table class="blue-border-table" style="margin-top:20px;">
+                    <tr>
+                        <th>SKU</th>
+                        <th>QTY</th>
+                        <th>DESCRIPTION</th>
+                        <th>UNIT PRICE</th>
+                        <th>EXTENDED PRICE</th>
+                    </tr>
+
+                    <tr t-foreach="o.invoice_line_ids.filtered(lambda l: not l.display_type)" t-as="line">
+                        <td><t t-esc="line.product_id.default_code"/></td>
+                        <td class="text-center"><t t-esc="line.quantity"/></td>
+                        <td><t t-esc="line.name"/></td>
+                        <td class="text-right">
+                            <span t-field="line.price_unit" t-options='{"widget":"monetary","display_currency":o.currency_id}'/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="line.price_subtotal" t-options='{"widget":"monetary","display_currency":o.currency_id}'/>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- TOTALS -->
+                <table class="totals-table">
+                    <tr>
+                        <th>SUBTOTAL</th>
+                        <td><span t-field="o.amount_untaxed" t-options='{"widget":"monetary","display_currency":o.currency_id}'/></td>
+                    </tr>
+                    <tr>
+                        <th>TOTAL TAXES</th>
+                        <td><span t-field="o.amount_tax" t-options='{"widget":"monetary","display_currency":o.currency_id}'/></td>
+                    </tr>
+                    <tr>
+                        <th>TOTAL AMOUNT</th>
+                        <td><span t-field="o.amount_total" t-options='{"widget":"monetary","display_currency":o.currency_id}'/></td>
+                    </tr>
+                    <tr>
+                        <th>INVOICE BALANCE</th>
+                        <td><span t-field="o.amount_residual" t-options='{"widget":"monetary","display_currency":o.currency_id}'/></td>
+                    </tr>
+                </table>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- ================= MAIN ================= -->
+    <template id="report_ul_distributors_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="ul_reports.report_ul_distributors_invoice_document"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -12,7 +12,7 @@
             <!-- Update the image field to enable zoom -->
             <xpath expr="//field[@name='image_128']" position="attributes">
                 <attribute name="options">{'zoom': true, 'preview_image': 'image_1920', 'size': [55, 55], 'img_class': 'object-fit-contain'}</attribute>
-                <attribute name="class" add="o_kanban_image_zoom" separator=" "/>
+                <attribute name="class" add="o_kanban_image_zoom ul_clickable_image" separator=" "/>
             </xpath>
         </field>
     </record>

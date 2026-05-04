@@ -3,6 +3,8 @@
     'version': '19.0.1.0.0',
     'category': 'Accounting',
     'summary': 'AR Report: Sales Rep & Branch filters + Due Date column',
+    'author': 'Rmeta Technologies',
+    'website': 'https://www.rmetatech.com/',
     'depends': ['account_reports', 'point_of_sale', 'stock', 'sale_stock'],
     'data': [
         'data/aged_receivable_due_date_column.xml',
