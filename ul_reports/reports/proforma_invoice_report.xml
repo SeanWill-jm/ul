@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================= PAPERFORMAT ================= -->
+    <record id="paperformat_ul_proforma" model="report.paperformat">
+        <field name="name">UL Proforma Invoice Paperformat</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">15</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">15</field>
+        <field name="margin_right">15</field>
+    </record>
+
+    <!-- ================= REPORT ACTION ================= -->
+    <record id="action_report_ul_proforma_invoice" model="ir.actions.report">
+        <field name="name">UL Proforma Invoice</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ul_reports.report_ul_proforma_invoice</field>
+        <field name="report_file">ul_reports.report_ul_proforma_invoice</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="paperformat_id" ref="ul_reports.paperformat_ul_proforma"/>
+    </record>
+
+    <!-- ================= STYLES ================= -->
+    <template id="style_ul">
+        <style>
+            body { font-family: Arial; font-size: 12px; }
+
+            .title {
+                font-size: 26px;
+                font-weight: bold;
+                text-align: right;
+                margin-bottom: 10px;
+            }
+
+            .orange-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .orange-table th,
+            .orange-table td {
+                border: 1px solid #F28021;
+                padding: 6px;
+                font-size: 12px;
+            }
+
+            .orange-table th {
+                background: #fff;
+                color: #000;
+                font-weight: bold;
+            }
+
+            .product-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+            }
+
+            .product-table th {
+                border: 1px solid #F28021;
+                padding: 6px;
+                font-size: 11px;
+            }
+
+            .product-table td {
+                border-bottom: 1px solid #ccc;
+                padding: 6px;
+            }
+
+            .totals {
+                float: right;
+                width: 260px;
+                margin-top: 15px;
+                border-collapse: collapse;
+            }
+
+            .totals td {
+                border: 1px solid #F28021;
+                padding: 8px;
+                font-weight: bold;
+            }
+
+            .row { display: flex; }
+            .col-6 { width: 50%; }
+        </style>
+    </template>
+
+    <!-- ================= MAIN ================= -->
+    <template id="report_ul_proforma_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="ul_reports.doc_ul"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- ================= DOCUMENT ================= -->
+    <template id="doc_ul">
+        <t t-call="web.basic_layout">
+            <div class="page">
+
+                <t t-call="ul_reports.style_ul"/>
+
+                <!-- HEADER -->
+                <div class="row">
+                    <div class="col-6">
+                        <img t-if="o.company_id.logo"
+                             t-att-src="image_data_uri(o.company_id.logo)"
+                             style="max-height:80px;"/>
+                        <div>Where quality meets expectation!</div>
+
+                        <div>
+                            <t t-esc="o.company_id.street"/><br/>
+                            <t t-esc="o.company_id.city"/><br/>
+                            <t t-esc="o.company_id.phone"/><br/>
+                            <t t-esc="o.company_id.email"/>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="title">PROFORMA INVOICE</div>
+
+                        <table class="orange-table" style="width:70%; float:right;">
+                            <tr>
+                                <td>ACCOUNT NO.</td>
+                                <td><t t-esc="o.partner_id.id"/></td>
+                            </tr>
+                            <tr>
+                                <td>DATE</td>
+                                <td><span t-field="o.date_order"/></td>
+                            </tr>
+                            <tr>
+                                <td>INVOICE NO.</td>
+                                <td><t t-esc="o.name"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- BILL / SHIP -->
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-6">
+                        <strong>Bill To</strong><br/>
+                        <span t-field="o.partner_id"/>
+                    </div>
+
+                    <div class="col-6">
+                        <strong>Ship To</strong><br/>
+                        <span t-field="o.partner_shipping_id"/>
+                    </div>
+                </div>
+
+                <!-- PO TABLE (WITH EMPTY COLUMN) -->
+                <table class="orange-table" style="margin-top:20px;">
+                    <tr>
+                        <th>P.O NUMBER</th>
+                        <th>LOCATION</th>
+                        <th>REP</th>
+                        <th>INVOICE TERMS</th>
+                        <th>DUE DATE</th>
+                        <th>SHIP VIA</th>
+                        <th></th>
+                    </tr>
+
+                    <tr>
+                        <td><t t-esc="o.client_order_ref or ''"/></td>
+                        <td>101</td>
+                        <td><t t-esc="o.user_id.name"/></td>
+                        <td>Due On Receipt</td>
+                        <td><span t-field="o.validity_date"/></td>
+                        <td><t t-esc="o.carrier_id.name if o.carrier_id else ''"/></td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                <!-- PRODUCTS -->
+                <table class="product-table">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>QTY</th>
+                            <th>DESCRIPTION</th>
+                            <th>UNIT PRICE</th>
+                            <th>TAX</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr t-foreach="o.order_line" t-as="l">
+                            <td><t t-esc="l.product_id.default_code"/></td>
+                            <td><t t-esc="l.product_uom_qty"/></td>
+                            <td><t t-esc="l.name"/></td>
+                            <td><span t-field="l.price_unit"/></td>
+                            <td><t t-esc="', '.join(l.tax_ids.mapped('name'))"/></td>
+                            <td><span t-field="l.price_subtotal"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- TOTAL -->
+                <table class="totals">
+                    <tr>
+                        <td>SUBTOTAL</td>
+                        <td><span t-field="o.amount_untaxed"/></td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL TAX</td>
+                        <td><span t-field="o.amount_tax"/></td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL AMOUNT</td>
+                        <td><span t-field="o.amount_total"/></td>
+                    </tr>
+                </table>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>
+
