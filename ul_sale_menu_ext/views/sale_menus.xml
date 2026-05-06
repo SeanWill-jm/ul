@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Custom Action for Invoices: Restricted to customers where the user is the salesperson -->
+    <record id="action_move_out_invoice_restricted" model="ir.actions.act_window">
+        <field name="name">Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,kanban,form,activity</field>
+        <field name="view_id" ref="account.view_out_invoice_tree"/>
+        <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+        <field name="domain">[('move_type', '=', 'out_invoice'), ('partner_id.user_id', '=', uid)]</field>
+        <field name="context">{'default_move_type': 'out_invoice', 'display_account_trust': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a customer invoice
+            </p><p class="o_view_nocontent_neutral_face">
+                You'll only see invoices for customers where you are the assigned salesperson.
+            </p>
+        </field>
+    </record>
+
+    <!-- Custom Action for Credit Notes: Restricted to customers where the user is the salesperson -->
+    <record id="action_move_out_refund_restricted" model="ir.actions.act_window">
+        <field name="name">Credit Notes</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,kanban,form,activity</field>
+        <field name="view_id" ref="account.view_out_credit_note_tree"/>
+        <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+        <field name="domain">[('move_type', '=', 'out_refund'), ('partner_id.user_id', '=', uid)]</field>
+        <field name="context">{'search_default_out_refund': 1, 'default_move_type': 'out_refund', 'display_account_trust': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a credit note
+            </p><p class="o_view_nocontent_neutral_face">
+                You'll only see credit notes for customers where you are the assigned salesperson.
+            </p>
+        </field>
+    </record>
+
+    <!-- New sub-menu under Sales > Orders for Accounting links -->
+    <menuitem id="menu_sale_accounting"
+              name="Accounting"
+              parent="sale.sale_order_menu"
+              sequence="50"
+              groups="sales_team.group_sale_salesman"/>
+
+    <!-- Restricted Invoices Menu -->
+    <menuitem id="menu_sale_invoice_custom"
+              name="Invoices"
+              parent="menu_sale_accounting"
+              action="action_move_out_invoice_restricted"
+              sequence="10"/>
+
+    <!-- Restricted Credit Notes Menu -->
+    <menuitem id="menu_sale_credit_note_custom"
+              name="Credit Notes"
+              parent="menu_sale_accounting"
+              action="action_move_out_refund_restricted"
+              sequence="20"/>
+
+    <!-- Duplicate of Reporting > Aged Receivable (Standard Action) -->
+    <menuitem id="menu_sale_aged_receivable_custom"
+              name="Aged Receivable"
+              parent="menu_sale_accounting"
+              action="account_reports.action_account_report_ar"
+              sequence="30"/>
+
+</odoo>
