@@ -7,13 +7,13 @@
         <field name="default" eval="False"/>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">15</field>
-        <field name="margin_bottom">15</field>
-        <field name="margin_left">15</field>
-        <field name="margin_right">15</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">10</field>
-        <field name="dpi">90</field>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
     </record>
 
     <!-- ================= REPORT ACTION ================= -->
@@ -28,62 +28,88 @@
     </record>
 
     <!-- ================= STYLES ================= -->
-    <template id="report_ul_shared_styles">
+    <template id="report_ul_distributor_styles">
         <style>
-            .page { font-family: Arial; font-size: 12px; }
-
-            .title-document {
-                font-size: 28px;
-                font-weight: bold;
-                text-align: right;
-                color: #1f4e79;
+            .page { 
+                font-family: 'Arial', sans-serif; 
+                font-size: 10pt; 
+                color: #000;
             }
-
-            .slogan-blue {
-                color: #d32f2f;
-                font-weight: bold;
-            }
-
-            .blue-border-table {
+            .blue-text { color: #003366 !important; }
+            .bold { font-weight: bold; }
+            
+            .header-table, .lines-table, .info-table {
                 width: 100%;
                 border-collapse: collapse;
             }
-
-            .blue-border-table th {
-                background: #1f4e79;
-                color: #fff;
-                padding: 6px;
-                font-size: 11px;
+            
+            .header-table th, .header-table td,
+            .lines-table th, .lines-table td,
+            .info-table th, .info-table td {
+                border: 1px solid #003366;
+                padding: 4px;
             }
-
-            .blue-border-table td {
-                padding: 6px;
-                border: 1px solid #ccc;
-                font-size: 11px;
+            
+            .header-table th, .lines-table th, .info-table th {
+                background-color: #003366;
+                color: white;
+                text-align: center;
+                font-size: 9pt;
+                text-transform: uppercase;
+                font-weight: normal;
             }
-
+            
+            .address-box {
+                border: 1px solid #003366;
+                min-height: 140px;
+                margin-bottom: 10px;
+            }
+            
+            .address-header {
+                background-color: #003366;
+                color: white;
+                padding: 4px 10px;
+                font-weight: bold;
+                font-size: 10pt;
+            }
+            
+            .address-content {
+                padding: 8px 10px;
+                font-size: 10pt;
+                line-height: 1.4;
+            }
+            
             .totals-table {
-                width: 40%;
+                width: 320px;
                 float: right;
                 border-collapse: collapse;
-                margin-top: 20px;
+                margin-top: 15px;
             }
-
-            .totals-table th {
-                background: #1f4e79;
-                color: white;
-                padding: 8px;
-                text-align: left;
-            }
-
+            
             .totals-table td {
-                text-align: right;
-                padding: 8px;
-                border: 1px solid #ccc;
+                border: 1px solid #003366;
+                padding: 4px 8px;
             }
-
+            
+            .totals-label {
+                background-color: #003366;
+                color: white;
+                font-weight: bold;
+                width: 50%;
+                font-size: 9pt;
+            }
+            
+            .totals-value {
+                text-align: right;
+                width: 50%;
+                font-size: 10pt;
+            }
+            
             .text-right { text-align: right; }
             .text-center { text-align: center; }
+            .mt-4 { margin-top: 20px; }
+            
+            h1 { margin: 0; padding: 0; }
         </style>
     </template>
 
@@ -91,37 +117,32 @@
     <template id="report_ul_distributors_invoice_document">
         <t t-call="web.basic_layout">
             <div class="page">
-                <t t-call="ul_reports.report_ul_shared_styles"/>
+                <t t-call="ul_reports.report_ul_distributor_styles"/>
 
-                <!-- HEADER -->
-                <div class="row" style="margin-bottom: 30px;">
-                    <div class="col-6">
-                        <img t-if="o.company_id.logo"
-                             t-att-src="image_data_uri(o.company_id.logo)"
-                             style="max-height: 85px;"/>
-
-                        <div class="slogan-blue">Where quality meets expectation!</div>
-
-                        <div>
+                <!-- HEADER SECTION -->
+                <div class="row">
+                    <div class="col-4">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 110px; width: auto;"/>
+                    </div>
+                    <div class="col-4" style="padding-top: 10px;">
+                        <div style="font-size: 11pt;">
                             <div t-if="o.company_id.street"><t t-esc="o.company_id.street"/></div>
                             <div t-if="o.company_id.city"><t t-esc="o.company_id.city"/></div>
                             <div t-if="o.company_id.phone">Ph: <t t-esc="o.company_id.phone"/></div>
                             <div t-if="o.company_id.email">E: <t t-esc="o.company_id.email"/></div>
-                            <div t-if="o.company_id.vat">GCT#: <t t-esc="o.company_id.vat"/></div>
+                            <div style="margin-top: 15px;" class="bold">GCT# : <t t-esc="o.company_id.vat"/></div>
                         </div>
                     </div>
-
-                    <div class="col-6">
-                        <div class="title-document">INVOICE</div>
-
-                        <table class="blue-border-table" style="width: 75%; float:right;">
+                    <div class="col-4 text-right">
+                        <h1 class="blue-text bold" style="font-size: 28pt; margin-bottom: 10px;">INVOICE</h1>
+                        <table class="header-table" style="width: 260px; float: right;">
                             <tr>
                                 <th>ACCOUNT NO.</th>
-                                <td class="text-center"><t t-esc="o.partner_id.ref or ''"/></td>
+                                <td class="text-center"><t t-esc="o.partner_id.ref or o.ul_account_no or ''"/></td>
                             </tr>
                             <tr>
                                 <th>DATE</th>
-                                <td class="text-center"><span t-field="o.invoice_date"/></td>
+                                <td class="text-center"><span t-field="o.invoice_date" t-options='{"widget": "date", "format": "dd MMM yyyy"}'/></td>
                             </tr>
                             <tr>
                                 <th>TRANSACTION NO.</th>
@@ -131,83 +152,106 @@
                     </div>
                 </div>
 
-                <!-- CUSTOMER -->
-                <div class="row" style="margin-bottom: 30px;">
-                    <div class="col-6">
-                        <strong>Bill To</strong>
-                        <div t-field="o.partner_id"
-                             t-options='{"widget":"contact","fields":["name","address"],"no_marker":True}'/>
+                <!-- ADDRESS SECTION -->
+                <div class="row mt-4">
+                    <div class="col-5">
+                        <div class="address-box">
+                            <div class="address-header">Bill To</div>
+                            <div class="address-content">
+                                <div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["name", "address"], "no_marker": True}'/>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="col-6">
-                        <strong>Ship To</strong>
-                        <div t-field="o.partner_shipping_id"
-                             t-options='{"widget":"contact","fields":["name","address","phone"],"no_marker":True}'/>
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                        <div class="address-box">
+                            <div class="address-header">Ship To</div>
+                            <div class="address-content">
+                                <div t-field="o.partner_shipping_id" t-options='{"widget": "contact", "fields": ["name", "address", "phone"], "no_marker": True}'/>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- INFO TABLE WITH OTHER INFO -->
-                <table class="blue-border-table">
-                    <tr>
-                        <th>P.O. NUMBER</th>
-                        <th>LOCATION</th>
-                        <th>REP</th>
-                        <th>INVOICE TERMS</th>
-                        <th>DUE DATE</th>
-                        <th>SHIP VIA</th>
-                        <th>OTHER INFO</th>
-                    </tr>
-                    <tr>
-                        <td><t t-esc="o.ref or ''"/></td>
-                        <td><t t-esc="o.ul_location or ''"/></td>
-                        <td><t t-esc="o.invoice_user_id.name or ''"/></td>
-                        <td><t t-esc="o.invoice_payment_term_id.name or ''"/></td>
-                        <td><span t-field="o.invoice_date_due"/></td>
-                        <td><t t-esc="o.ul_ship_via or ''"/></td>
-                        <td><t t-esc="o.ul_other_info or ''"/></td>
-                    </tr>
+                <!-- INFO TABLE -->
+                <table class="info-table mt-4">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">P.O. NUMBER</th>
+                            <th style="width: 10%;">LOCATION</th>
+                            <th style="width: 10%;">REP</th>
+                            <th style="width: 20%;">INVOICE TERMS</th>
+                            <th style="width: 15%;">DUE DATE</th>
+                            <th style="width: 15%;">SHIP VIA</th>
+                            <th style="width: 15%;">Other Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center" style="min-height: 25px;"><t t-esc="o.ref or ''"/></td>
+                            <td class="text-center"><t t-esc="o.ul_location or ''"/></td>
+                            <td class="text-center"><t t-esc="o.invoice_user_id.name or ''"/></td>
+                            <td class="text-center"><t t-esc="o.invoice_payment_term_id.name or ''"/></td>
+                            <td class="text-center"><span t-field="o.invoice_date_due" t-options='{"widget": "date", "format": "dd MMM yyyy"}'/></td>
+                            <td class="text-center"><t t-esc="o.ul_ship_via or ''"/></td>
+                            <td class="text-center"><t t-esc="o.ul_other_info or ''"/></td>
+                        </tr>
+                    </tbody>
                 </table>
 
-                <!-- PRODUCTS -->
-                <table class="blue-border-table" style="margin-top:20px;">
-                    <tr>
-                        <th>SKU</th>
-                        <th>QTY</th>
-                        <th>DESCRIPTION</th>
-                        <th>UNIT PRICE</th>
-                        <th>EXTENDED PRICE</th>
-                    </tr>
-
-                    <tr t-foreach="o.invoice_line_ids.filtered(lambda l: not l.display_type)" t-as="line">
-                        <td><t t-esc="line.product_id.default_code"/></td>
-                        <td class="text-center"><t t-esc="line.quantity"/></td>
-                        <td><t t-esc="line.name"/></td>
-                        <td class="text-right">
-                            <span t-field="line.price_unit" t-options='{"widget":"monetary","display_currency":o.currency_id}'/>
-                        </td>
-                        <td class="text-right">
-                            <span t-field="line.price_subtotal" t-options='{"widget":"monetary","display_currency":o.currency_id}'/>
-                        </td>
-                    </tr>
+                <!-- LINES TABLE -->
+                <table class="lines-table mt-4">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; width: 15%;">SKU</th>
+                            <th style="width: 8%;">QTY</th>
+                            <th style="text-align: left; width: 47%;">DESCRIPTION</th>
+                            <th style="text-align: right; width: 15%;">UNIT PRICE</th>
+                            <th style="text-align: right; width: 15%;">EXTENDED PRICE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.invoice_line_ids.filtered(lambda l: not l.display_type)" t-as="line">
+                            <tr>
+                                <td><t t-esc="line.product_id.default_code"/></td>
+                                <td class="text-center"><t t-esc="int(line.quantity)"/></td>
+                                <td><t t-esc="line.name"/></td>
+                                <td class="text-right">
+                                    <span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
                 </table>
 
-                <!-- TOTALS -->
+                <!-- TOTALS SECTION -->
                 <table class="totals-table">
                     <tr>
-                        <th>SUBTOTAL</th>
-                        <td><span t-field="o.amount_untaxed" t-options='{"widget":"monetary","display_currency":o.currency_id}'/></td>
+                        <td class="totals-label">SUBTOTAL</td>
+                        <td class="totals-value">
+                            <span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
                     </tr>
                     <tr>
-                        <th>TOTAL TAXES</th>
-                        <td><span t-field="o.amount_tax" t-options='{"widget":"monetary","display_currency":o.currency_id}'/></td>
+                        <td class="totals-label">TOTAL TAXES</td>
+                        <td class="totals-value">
+                            <span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
                     </tr>
                     <tr>
-                        <th>TOTAL AMOUNT</th>
-                        <td><span t-field="o.amount_total" t-options='{"widget":"monetary","display_currency":o.currency_id}'/></td>
+                        <td class="totals-label">TOTAL AMOUNT</td>
+                        <td class="totals-value bold">
+                            <span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
                     </tr>
                     <tr>
-                        <th>INVOICE BALANCE</th>
-                        <td><span t-field="o.amount_residual" t-options='{"widget":"monetary","display_currency":o.currency_id}'/></td>
+                        <td class="totals-label">INVOICE BALANCE</td>
+                        <td class="totals-value bold">
+                            <span t-field="o.amount_residual" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
                     </tr>
                 </table>
 
