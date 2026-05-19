@@ -24,26 +24,27 @@ class ProductProduct(models.Model):
         start_date = start_date_val.date()
         today = date.today()
         
-        # Calculate months passed. 
-        # Using a simple (days / 30.0) or (relativedelta).
-        # Let's use days / 30.0 to be more granular, or as requested "number of months passed".
-        # If they want integer months, we can use delta.years * 12 + delta.months.
-        # But for an average, float months is usually better. 
-        # I'll use total days / 30.0 for a more accurate 'average'.
+        # Get the last day of the previous month (exclude current running month)
+        # If today is May 23, we calculate till April 30
+        first_day_current_month = today.replace(day=1)
+        last_day_previous_month = first_day_current_month - relativedelta(days=1)
         
-        days_passed = (today - start_date).days
-        if days_passed <= 0:
-            months_passed = 1.0 # Avoid division by zero
-        else:
-            months_passed = days_passed / 30.0
+        # Calculate number of complete months from start_date to last_day_previous_month
+        delta = relativedelta(last_day_previous_month, start_date)
+        months_passed = delta.years * 12 + delta.months + 1  # +1 to include the start month
+        
+        if months_passed <= 0:
+            for product in self:
+                product.avg_sales_per_month = 0.0
+            return
 
-        # Batch fetch sold quantities to optimize performance
-        # We only count sales from the start_date onwards to match the denominator
+        # Batch fetch sold quantities only till the end of last month
         sales_data = self.env['sale.order.line'].read_group(
             [
                 ('product_id', 'in', self.ids), 
                 ('state', 'in', ['sale', 'done']),
-                ('order_id.date_order', '>=', start_date)
+                ('order_id.date_order', '>=', start_date),
+                ('order_id.date_order', '<=', last_day_previous_month)
             ],
             ['product_id', 'product_uom_qty'],
             ['product_id']
@@ -51,7 +52,5 @@ class ProductProduct(models.Model):
         sales_map = {item['product_id'][0]: item['product_uom_qty'] for item in sales_data}
 
         for product in self:
-            if product.product_tmpl_id.id == 6051:
-                print(product,sales_map.get(product.id, 0.0),months_passed)
             total_sold = sales_map.get(product.id, 0.0)
             product.avg_sales_per_month = total_sold / months_passed

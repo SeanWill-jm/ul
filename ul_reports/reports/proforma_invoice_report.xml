@@ -23,6 +23,7 @@
         <field name="report_file">ul_reports.report_ul_proforma_invoice</field>
         <field name="binding_model_id" ref="sale.model_sale_order"/>
         <field name="paperformat_id" ref="ul_reports.paperformat_ul_proforma"/>
+        <field name="binding_type">report</field>
     </record>
 
     <!-- ================= MAIN ================= -->

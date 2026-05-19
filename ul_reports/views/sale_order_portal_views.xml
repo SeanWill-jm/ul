@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Portal Sale Order View - Override Print Button to use Custom Proforma Invoice -->
+    <record id="sale_order_portal_template_inherit" model="ir.ui.view">
+        <field name="name">sale.order.portal.template.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_portal_template"/>
+        <field name="arch" type="xml">
+            <xpath expr="//a[@id='print_invoice_report']" position="attributes">
+                <attribute name="t-att-href">order.get_portal_url(query_string='&amp;report_type=pdf')</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
