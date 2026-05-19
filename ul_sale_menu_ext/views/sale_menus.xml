@@ -65,4 +65,11 @@
               action="account_reports.action_account_report_ar"
               sequence="30"/>
 
+    <!-- Main Menu: Aged Receivable with Icon -->
+    <menuitem id="menu_aged_receivable_main"
+              name="Aged Receivable"
+              action="account_reports.action_account_report_ar"
+              web_icon="ul_sale_menu_ext,/static/description/icon.png"
+              sequence="100"/>
+
 </odoo>

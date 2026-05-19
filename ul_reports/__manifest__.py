@@ -8,6 +8,7 @@
     'depends': ['ul_account_ar_custom', 'account', 'purchase', 'sale'],
     'data': [
         'views/report_fields_views.xml',
+        'views/sale_order_portal_views.xml',
         'reports/invoice_report.xml',
         'reports/proforma_invoice_report.xml',
         'reports/purchase_order_report.xml',
