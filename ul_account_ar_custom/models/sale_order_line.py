@@ -24,19 +24,25 @@ class SaleOrderLine(models.Model):
 
             for move in line.move_ids:
                 if move.state != 'done':
-
                     continue
-                # Count moves that belong to the pick operation type (internal pick step)
-                if pick_type and move.picking_id.picking_type_id == pick_type:
-                    qty += move.product_uom._compute_quantity(
-                        move.quantity, line.product_uom_id, rounding_method='HALF-UP'
-                    )
-                # Also count direct outgoing moves (1-step or ship step already done)
-                elif move.location_dest_id._is_outgoing():
-                    if not move.origin_returned_move_id or move.to_refund:
-                        qty += move.product_uom._compute_quantity(
-                            move.quantity, line.product_uom_id, rounding_method='HALF-UP'
-                        )
+                if pick_type:
+                    # For 2-step delivery, only count internal PICK moves
+                    if move.picking_id.picking_type_id == pick_type:
+                        if move.origin_returned_move_id:
+                            qty -= move.product_uom._compute_quantity(
+                                move.quantity, line.product_uom_id, rounding_method='HALF-UP'
+                            )
+                        else:
+                            qty += move.product_uom._compute_quantity(
+                                move.quantity, line.product_uom_id, rounding_method='HALF-UP'
+                            )
+                else:
+                    # For 1-step delivery, count outgoing moves
+                    if move.location_dest_id._is_outgoing():
+                        if not move.origin_returned_move_id or move.to_refund:
+                            qty += move.product_uom._compute_quantity(
+                                move.quantity, line.product_uom_id, rounding_method='HALF-UP'
+                            )
 
             delivered_qties[line] = qty
         return delivered_qties

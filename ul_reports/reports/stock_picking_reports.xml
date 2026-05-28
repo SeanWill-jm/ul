@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Customizations for stock.report_picking (Picking Operations) -->
+    <template id="report_picking_inherit_ul" inherit_id="stock.report_picking">
+        <!-- 1. Header Change: "Internal Transfer" to "PickList" -->
+        <xpath expr="//h3[@t-field='o.picking_type_id.code']" position="replace">
+            <h3>
+                <span t-if="o.picking_type_id.code == 'internal'">PickList</span>
+                <span t-else="" t-field="o.picking_type_id.code"/>
+            </h3>
+        </xpath>
+
+        <!-- 2. SKU separate column header -->
+        <xpath expr="//th[@name='th_product']" position="after">
+            <th name="th_sku" class="text-start">
+                <strong>SKU</strong>
+            </th>
+        </xpath>
+
+        <!-- 3. SKU cell in main move row -->
+        <xpath expr="//span[@t-field='move.product_id.display_name']/.." position="after">
+            <td class="text-start">
+                <span t-field="move.product_id.default_code"/>
+            </td>
+        </xpath>
+
+        <!-- 4. Empty SKU cell in move lines breakdown row (to preserve column alignment) -->
+        <xpath expr="//span[@style='margin-left: 50px;']/.." position="after">
+            <td class="text-start"/>
+        </xpath>
+
+        <!-- 5. Show customer state in this after contact (bold label + state name) -->
+        <xpath expr="//div[@name='div_contact']/div[@t-field='o.partner_id']" position="after">
+            <div t-if="o.partner_id.state_id" class="m-0">
+                <strong>State:</strong> <span t-field="o.partner_id.state_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Customizations for stock.report_delivery_document (Delivery Slip) -->
+    <template id="report_delivery_document_inherit_ul" inherit_id="stock.report_delivery_document">
+        <!-- 1. SKU separate column header (state != done) -->
+        <xpath expr="//th[@name='th_sm_product']" position="after">
+            <th name="th_sm_sku" class="text-start"><strong>SKU</strong></th>
+        </xpath>
+
+        <!-- 2. SKU separate column cell (state != done) -->
+        <xpath expr="//table[@name='stock_move_table']//span[@t-field='move.product_id']/.." position="after">
+            <td class="text-start">
+                <span t-field="move.product_id.default_code"/>
+            </td>
+        </xpath>
+
+        <!-- 3. SKU separate column header (state == done) -->
+        <xpath expr="//th[@name='th_sml_product']" position="after">
+            <th name="th_sml_sku" class="text-start">SKU</th>
+        </xpath>
+
+        <!-- 4. SKU separate column header (backorder table) -->
+        <xpath expr="//th[@name='th_sb_product']" position="after">
+            <th name="th_sb_sku" class="text-start"><strong>SKU</strong></th>
+        </xpath>
+
+        <!-- 5. SKU separate column cell (backorder table) -->
+        <xpath expr="//table[@name='stock_backorder_table']//span[@t-field='bo_line.product_id']/.." position="after">
+            <td class="text-start">
+                <span t-field="bo_line.product_id.default_code"/>
+            </td>
+        </xpath>
+
+        <!-- 6. Show customer state in this after contact (bold label + state name) -->
+        <xpath expr="//div[@name='div_contact']/div[@t-field='o.partner_id']" position="after">
+            <div t-if="o.partner_id.state_id" class="m-0">
+                <strong>State:</strong> <span t-field="o.partner_id.state_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Customizations for stock.stock_report_delivery_has_serial_move_line (Delivery Slip with serials) -->
+    <template id="stock_report_delivery_has_serial_move_line_inherit_ul" inherit_id="stock.stock_report_delivery_has_serial_move_line">
+        <!-- SKU separate column cell -->
+        <xpath expr="//span[@t-field='move_line.product_id']/.." position="after">
+            <td class="text-start">
+                <span t-field="move_line.product_id.default_code"/>
+            </td>
+        </xpath>
+    </template>
+
+    <!-- Customizations for stock.stock_report_delivery_aggregated_move_lines (Delivery Slip aggregated) -->
+    <template id="stock_report_delivery_aggregated_move_lines_inherit_ul" inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+        <!-- SKU separate column cell -->
+        <xpath expr="//span[@t-out=&quot;aggregated_lines[line]['name']&quot;]/.." position="after">
+            <td class="text-start">
+                <span t-if="aggregated_lines[line].get('product')" t-out="aggregated_lines[line]['product'].default_code"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>

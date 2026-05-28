@@ -13,6 +13,7 @@
         'reports/proforma_invoice_report.xml',
         'reports/purchase_order_report.xml',
         'reports/distributor_invoice_report.xml',
+        'reports/stock_picking_reports.xml',
     ],
     'installable': True,
     'application': False,
