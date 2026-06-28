@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <!--
+        Standalone template for UlArFilters.
+        Inherits AccountReportFiltersCustomizable (same base as AgedPartnerBalanceFilters)
+        and re-adds the aging filters + our new Sales Rep & Branch filters.
+    -->
+    <t t-name="ul_account_ar_custom.ArFilters"
+       t-inherit="account_reports.AccountReportFiltersCustomizable">
+
+        <!-- Re-add aging based-on + interval (same as AgedPartnerBalanceFilters) -->
+        <xpath expr="//div[@id='filter_extra_options']" position="before">
+
+            <!-- Sales Rep filter -->
+            <t t-if="'ar_sales_rep_ids' in controller.cachedFilterOptions">
+                <div id="filter_ar_sales_rep">
+                    <Dropdown menuClass="'account_report_filter'">
+                        <button class="btn btn-secondary">
+                            <i class="fa fa-user me-1"/>Sales Rep
+                            <t t-if="controller.cachedFilterOptions.ar_selected_sales_rep_names and controller.cachedFilterOptions.ar_selected_sales_rep_names.length">
+                                <span class="badge bg-primary ms-1">
+                                    <t t-esc="controller.cachedFilterOptions.ar_selected_sales_rep_names.length"/>
+                                </span>
+                            </t>
+                        </button>
+                        <t t-set-slot="content">
+                            <div class="dropdown-item gap-2 align-items-center">
+                                <label>Sales Rep</label>
+                                <MultiRecordSelector
+                                    t-props="getMultiRecordSelectorProps('res.users', 'ar_sales_rep_ids')"
+                                    domain="[['share', '=', false]]"
+                                />
+                            </div>
+                        </t>
+                    </Dropdown>
+                </div>
+            </t>
+
+            <!-- Branch filter -->
+            <t t-if="'ar_branch_ids' in controller.cachedFilterOptions">
+                <div id="filter_ar_branch">
+                    <Dropdown menuClass="'account_report_filter'">
+                        <button class="btn btn-secondary">
+                            <i class="fa fa-building me-1"/>Branch
+                            <t t-if="controller.cachedFilterOptions.ar_selected_branch_names and controller.cachedFilterOptions.ar_selected_branch_names.length">
+                                <span class="badge bg-primary ms-1">
+                                    <t t-esc="controller.cachedFilterOptions.ar_selected_branch_names.length"/>
+                                </span>
+                            </t>
+                        </button>
+                        <t t-set-slot="content">
+                            <div class="dropdown-item gap-2 align-items-center">
+                                <label>Branch</label>
+                                <MultiRecordSelector
+                                    t-props="getMultiRecordSelectorProps('res.company', 'ar_branch_ids')"
+                                />
+                            </div>
+                        </t>
+                    </Dropdown>
+                </div>
+            </t>
+
+            <!-- Aging based-on (preserved from AgedPartnerBalanceFilters) -->
+            <t t-if="'aging_based_on' in controller.cachedFilterOptions">
+                <div>
+                    <t t-call="account_reports.AccountReportAgingBasedOn"/>
+                </div>
+            </t>
+            <t>
+                <div id="filter_aging_interval">
+                    <t t-call="account_reports.AccountReportAgingInterval"/>
+                </div>
+            </t>
+
+        </xpath>
+    </t>
+</templates>

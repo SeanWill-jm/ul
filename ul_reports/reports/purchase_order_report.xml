@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- PAPER FORMAT -->
+    <record id="paperformat_ul_purchase_order" model="report.paperformat">
+        <field name="name">UL Purchase Order Paperformat</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_spacing">0</field>
+    </record>
+
+    <!-- REPORT -->
+    <record id="action_report_ul_purchase_order" model="ir.actions.report">
+        <field name="name">UL Purchase Order</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ul_reports.report_ul_purchase_order</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="paperformat_id" ref="ul_reports.paperformat_ul_purchase_order"/>
+    </record>
+
+    <!-- DOCUMENT -->
+    <template id="report_ul_purchase_order_document">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-family: Arial, sans-serif; font-size: 10pt; color: #000;">
+                
+                <!-- INLINE STYLES -->
+                <t t-set="blue_border" t-value="'border: 1px solid #56aed1 !important;'"/>
+                <t t-set="blue_text" t-value="'color: #56aed1 !important;'"/>
+
+                <!-- HEADER -->
+                <div style="width: 100%; display: table; margin-bottom: 20px;">
+                    <div style="display: table-cell; width: 65%; vertical-align: top;">
+                        <img t-if="o.company_id.logo"
+                             t-att-src="image_data_uri(o.company_id.logo)"
+                             style="max-height: 100px; width: auto;"/>
+
+                        <div t-att-style="blue_text + ' font-weight: bold; margin-top: 10px;'">Where quality meets expectation!</div>
+
+                        <div style="margin-top: 10px; font-size: 9pt; line-height: 1.2;">
+                            <div t-if="o.company_id.street"><t t-esc="o.company_id.street"/></div>
+                            <div t-if="o.company_id.city"><t t-esc="o.company_id.city"/></div>
+                            <div t-if="o.company_id.phone">Ph: <t t-esc="o.company_id.phone"/></div>
+                            <div t-if="o.company_id.email">E: <t t-esc="o.company_id.email"/></div>
+                            <div t-if="o.company_id.website">Web: <t t-esc="o.company_id.website"/></div>
+                            <div style="margin-top: 10px; font-weight: bold;">GCT# : <t t-esc="o.company_id.vat"/></div>
+                        </div>
+                    </div>
+
+                    <div style="display: table-cell; width: 35%; vertical-align: top; text-align: right;">
+                        <div style="font-size: 24pt; font-weight: bold; margin-bottom: 10px;">PURCHASE ORDER</div>
+
+                        <table t-att-style="'width: 100%; border-collapse: collapse; ' + blue_border">
+                            <tr>
+                                <th t-att-style="'text-align: left; padding: 4px 8px; font-weight: bold; ' + blue_border">ACCOUNT NO.</th>
+                                <td t-att-style="'text-align: center; padding: 4px 8px; ' + blue_border"><t t-esc="o.partner_id.ref or o.ul_account_no or ''"/></td>
+                            </tr>
+                            <tr>
+                                <th t-att-style="'text-align: left; padding: 4px 8px; font-weight: bold; ' + blue_border">DATE</th>
+                                <td t-att-style="'text-align: center; padding: 4px 8px; ' + blue_border"><span t-field="o.date_order" t-options='{"widget": "date", "format": "dd MMM yyyy"}'/></td>
+                            </tr>
+                            <tr>
+                                <th t-att-style="'text-align: left; padding: 4px 8px; font-weight: bold; ' + blue_border">ORDER NO.</th>
+                                <td t-att-style="'text-align: center; padding: 4px 8px; ' + blue_border"><t t-esc="o.name"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- VENDOR / SHIP TO -->
+                <div style="width: 100%; display: table; margin-top: 20px;">
+                    <div style="display: table-cell; width: 50%; vertical-align: top;">
+                        <div style="font-weight: bold;">Vendor</div>
+                        <div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["name", "address"], "no_marker": True}'/>
+                    </div>
+                    <div style="display: table-cell; width: 50%; vertical-align: top;">
+                        <div style="font-weight: bold;">Ship To</div>
+                        <div t-field="o.company_id.partner_id" t-options='{"widget": "contact", "fields": ["name", "address", "phone"], "no_marker": True}'/>
+                    </div>
+                </div>
+
+                <!-- INFO TABLE -->
+                <table t-att-style="'width: 100%; border-collapse: collapse; margin-top: 20px; ' + blue_border">
+                    <thead>
+                        <tr>
+                            <th t-att-style="'text-align: center; padding: 4px 8px; font-weight: bold; ' + blue_border">REF/PO NO.</th>
+                            <th t-att-style="'text-align: center; padding: 4px 8px; font-weight: bold; ' + blue_border">REP</th>
+                            <th t-att-style="'text-align: center; padding: 4px 8px; font-weight: bold; ' + blue_border">PAYMENT TERMS</th>
+                            <th t-att-style="'text-align: center; padding: 4px 8px; font-weight: bold; ' + blue_border">SHIP VIA</th>
+                            <th t-att-style="'text-align: center; padding: 4px 8px; font-weight: bold; ' + blue_border"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td t-att-style="'text-align: center; padding: 8px; ' + blue_border"><t t-esc="o.partner_ref or ''"/></td>
+                            <td t-att-style="'text-align: center; padding: 8px; ' + blue_border"><t t-esc="o.user_id.name or ''"/></td>
+                            <td t-att-style="'text-align: center; padding: 8px; ' + blue_border"><t t-esc="o.payment_term_id.name or ''"/></td>
+                            <td t-att-style="'text-align: center; padding: 8px; ' + blue_border"><t t-esc="o.ul_ship_via or ''"/></td>
+                            <td t-att-style="'text-align: center; padding: 8px; ' + blue_border"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- LINES TABLE -->
+                <table t-att-style="'width: 100%; border-collapse: collapse; margin-top: 20px; ' + blue_border">
+                    <thead>
+                        <tr>
+                            <th t-att-style="'text-align: left; width: 15%; padding: 4px 8px; font-weight: bold; ' + blue_border">SKU / PART NO.</th>
+                            <th t-att-style="'text-align: center; width: 8%; padding: 4px 8px; font-weight: bold; ' + blue_border">QTY</th>
+                            <th t-att-style="'text-align: center; width: 8%; padding: 4px 8px; font-weight: bold; ' + blue_border">UOM</th>
+                            <th t-att-style="'text-align: left; width: 39%; padding: 4px 8px; font-weight: bold; ' + blue_border">DESCRIPTION</th>
+                            <th t-att-style="'text-align: right; width: 15%; padding: 4px 8px; font-weight: bold; ' + blue_border">UNIT PRICE</th>
+                            <th t-att-style="'text-align: right; width: 15%; padding: 4px 8px; font-weight: bold; ' + blue_border">EXTENDED PRICE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.order_line.filtered(lambda l: not l.display_type)" t-as="line">
+                            <tr>
+                                <td t-att-style="'padding: 4px 8px; ' + blue_border"><t t-esc="line.product_id.default_code or ''"/></td>
+                                <td t-att-style="'text-align: center; padding: 4px 8px; ' + blue_border"><t t-esc="line.product_qty"/></td>
+                                <td t-att-style="'text-align: center; padding: 4px 8px; ' + blue_border"><t t-esc="line.product_uom_id.name"/></td>
+                                <td t-att-style="'padding: 4px 8px; ' + blue_border"><t t-esc="line.name"/></td>
+                                <td t-att-style="'text-align: right; padding: 4px 8px; ' + blue_border">
+                                    <span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                                <td t-att-style="'text-align: right; padding: 4px 8px; ' + blue_border">
+                                    <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <div style="border-bottom: 2px solid #7ea7d8 !important; margin: 20px 0;"></div>
+
+                <!-- TOTALS SECTION -->
+                <div style="width: 100%; display: table;">
+                    <div style="display: table-cell; width: 60%;"></div>
+                    <div style="display: table-cell; width: 40%; vertical-align: top;">
+                        <table t-att-style="'width: 100%; border-collapse: collapse; ' + blue_border">
+                            <tr>
+                                <td t-att-style="'padding: 4px 8px; font-weight: bold; ' + blue_border">SUBTOTAL</td>
+                                <td t-att-style="'text-align: right; padding: 4px 8px; ' + blue_border"><span t-field="o.amount_untaxed"/></td>
+                            </tr>
+                            <tr>
+                                <td t-att-style="'padding: 4px 8px; font-weight: bold; ' + blue_border">TOTAL TAXES</td>
+                                <td t-att-style="'text-align: right; padding: 4px 8px; ' + blue_border"><span t-field="o.amount_tax"/></td>
+                            </tr>
+                            <tr>
+                                <td t-att-style="'padding: 4px 8px; font-weight: bold; ' + blue_border">TOTAL AMOUNT</td>
+                                <td t-att-style="'text-align: right; padding: 4px 8px; font-weight: bold; ' + blue_border"><span t-field="o.amount_total"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- MAIN -->
+    <template id="report_ul_purchase_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="ul_reports.report_ul_purchase_order_document"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inventory Settings Inheritance -->
+    <record id="res_config_settings_view_form_inherit_stock_avg_sales" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.stock.avg.sales</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="stock.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//setting[@id='annual_inventory_date']" position="after">
+                <setting id="avg_sales_calculation" string="Average Sales Calculation" help="Set the start date for calculating average product sales per month.">
+                    <div class="content-group">
+                        <div class="row mt16">
+                            <label for="inventory_start_month" class="col-lg-3 o_light_label"/>
+                            <field name="inventory_start_month" widget="date"/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product Stock Tree View Inheritance -->
+    <record id="view_stock_product_tree_inherit_avg_sales" model="ir.ui.view">
+        <field name="name">product.product.stock.tree.inherit.avg.sales</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_stock_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='qty_available']" position="after">
+                <field name="avg_sales_per_month" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
