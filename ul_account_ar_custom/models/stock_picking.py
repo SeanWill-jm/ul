@@ -7,6 +7,13 @@ import pandas as pd
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
+    partner_state_id = fields.Many2one(
+        'res.country.state',
+        related='partner_id.state_id',
+        string='Partner State',
+        store=True,
+    )
+
     def button_validate(self):
         if self.env.company.no_backorder and not self.env.context.get('skip_backorder'):
             return super().with_context(

@@ -1,0 +1,19 @@
+<odoo>
+    <menuitem id="menu_product_image_importer_root"
+              name="Product Image Importer"
+              parent="stock.menu_stock_root"
+              sequence="100"/>
+
+    <record id="action_product_image_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import Product Images</field>
+        <field name="res_model">product.image.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_product_image_importer_action"
+              name="Import Images"
+              parent="menu_product_image_importer_root"
+              action="action_product_image_import_wizard"
+              sequence="10"/>
+</odoo>
