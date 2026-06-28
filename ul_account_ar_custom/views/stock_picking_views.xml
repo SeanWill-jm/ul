@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Delivery Order Tree -->
+    <record id="vpicktree_inherit_partner_state" model="ir.ui.view">
+        <field name="name">stock.picking.tree.inherit.partner.state</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="partner_state_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
