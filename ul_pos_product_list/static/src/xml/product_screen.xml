@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="ul_pos_product_list.ProductScreen" t-inherit="point_of_sale.ProductScreen" t-inherit-mode="extension">
+        <xpath expr="//div[@t-foreach='pos.productToDisplayByCateg']" position="before">
+            <div class="ul-table-header d-flex text-dark fw-bold px-3 py-3 sticky-top bg-light border-bottom" style="z-index: 10;">
+                <div class="ul-col-ref" style="width: 150px;">Internal Reference</div>
+                <div class="ul-col-name flex-grow-1 px-2">Product Name</div>
+                <div class="ul-col-desc" style="width: 250px;">Description</div>
+            </div>
+        </xpath>
+        <!-- Remove the gap classes from product-list so there's no space between rows -->
+        <xpath expr="//div[@t-foreach='pos.productToDisplayByCateg']" position="attributes">
+            <attribute name="class">product-list d-flex flex-column px-0 pt-0 pb-2</attribute>
+        </xpath>
+    </t>
+</templates>

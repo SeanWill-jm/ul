@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="ul_pos_product_list.ProductCard" t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
+        <xpath expr="//article" position="replace">
+            <article tabindex="0"
+                role="button"
+                t-attf-class="{{props.class}} {{props.color ? `o_colorlist_item_color_transparent_${props.color}` : ''}} product position-relative d-flex align-items-center px-3 py-3 text-start cursor-pointer ul-product-list-item bg-white"
+                t-on-keypress="(event) => event.code === 'Space' ? props.onClick(event) : ()=>{}"
+                t-on-click.stop="props.onClick"
+                t-att-data-product-id="props.productId"
+                t-attf-aria-labelledby="article_product_{{props.productId}}">
+                
+                <div class="ul-product-details d-flex w-100 align-items-center text-dark">
+                    <!-- Internal Reference -->
+                    <div class="ul-default-code fw-bold text-dark" style="width: 150px;">
+                        <t t-esc="props.product.default_code || ''"/>
+                    </div>
+                    
+                    <!-- Product Name -->
+                    <div class="product-name fw-bold text-dark flex-grow-1 px-2" t-attf-id="article_product_{{props.productId}}">
+                        <t t-esc="props.name" />
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="ul-public-desc text-muted small" style="width: 250px;">
+                        <t t-out="props.product.productDescriptionMarkup || ''" />
+                    </div>
+                </div>
+                
+                <span t-if="props.productCartQty"
+                    t-out="this.productQty"
+                    class="product-cart-qty position-absolute bottom-0 end-0 m-1 px-2 rounded bg-primary text-white fs-5 fw-bolder"
+                    t-att-class="{'text-danger': this.productQty lt 0}"/>
+                <span t-if="props.comboExtraPrice" style="font-size: 0.75rem;" class="price-extra px-2 py-0 rounded-pill text-bg-info position-absolute top-0 end-0 mt-1 me-1">
+                    <t t-esc="props.comboExtraPrice"/>
+                </span>
+                <t t-slot="quantityButtons" />
+            </article>
+        </xpath>
+    </t>
+
+</templates>
