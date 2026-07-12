@@ -1,8 +1,5 @@
 /* Make the POS product list a single column list view with no gaps */
-.product-list {
-    grid-template-columns: 1fr !important;
-    background-color: #f8f9fa; /* standard light grey */
-}
+/* Removed .product-list override to prevent breaking CategorySelector */
 
 /* Ensure the product items look good in a list */
 .ul-product-list-item {

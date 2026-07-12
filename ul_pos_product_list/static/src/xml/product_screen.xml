@@ -8,9 +8,10 @@
                 <div class="ul-col-desc" style="width: 250px;">Description</div>
             </div>
         </xpath>
-        <!-- Remove the gap classes from product-list so there's no space between rows -->
+        <!-- Unconditionally apply flex layout for products to create a list view -->
         <xpath expr="//div[@t-foreach='pos.productToDisplayByCateg']" position="attributes">
-            <attribute name="class">product-list d-flex flex-column px-0 pt-0 pb-2</attribute>
+            <attribute name="class"></attribute>
+            <attribute name="t-attf-class">product-list pt-0 pb-2 d-flex flex-column px-0</attribute>
         </xpath>
     </t>
 </templates>
