@@ -10,6 +10,8 @@
             'ul_pos_product_list/static/src/css/product_list.css',
             'ul_pos_product_list/static/src/xml/product_screen.xml',
             'ul_pos_product_list/static/src/xml/product_card.xml',
+            'ul_pos_product_list/static/src/js/stock_sync.js',
+            'ul_pos_product_list/static/src/js/product_card.js',
         ],
     },
     'installable': True,
