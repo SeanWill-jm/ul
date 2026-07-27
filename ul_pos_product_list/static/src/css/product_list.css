@@ -1,0 +1,41 @@
+/* Make the POS product list a single column list view with no gaps */
+/* Removed .product-list override to prevent breaking CategorySelector */
+
+/* Ensure the product items look good in a list */
+.ul-product-list-item {
+    min-height: auto !important;
+    height: auto !important;
+    border: none !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    margin-bottom: 0px !important;
+    background-color: #ffffff !important;
+    border-radius: 0 !important;
+}
+
+.ul-product-list-item:hover {
+    background-color: #f1f3f5 !important;
+}
+
+.ul-product-details {
+    padding: 0;
+}
+
+.ul-default-code {
+    /* No custom font-size to inherit default POS styling identically */
+}
+
+.ul-public-desc {
+    /* To show HTML correctly, we don't truncate strictly to lines, but we can limit height if needed */
+    max-height: 3rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ul-public-desc p {
+    margin-bottom: 0;
+}
+
+/* Disable ratio ratio-4x3 for product image if it still tries to show */
+.ul-product-list-item .product-img {
+    display: none !important;
+}

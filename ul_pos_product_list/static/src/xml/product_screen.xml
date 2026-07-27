@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="ul_pos_product_list.ProductScreen" t-inherit="point_of_sale.ProductScreen" t-inherit-mode="extension">
+        <xpath expr="//div[@t-foreach='pos.productToDisplayByCateg']" position="before">
+            <div class="ul-table-header d-flex text-dark fw-bold px-3 py-3 sticky-top bg-light border-bottom" style="z-index: 10;">
+                <div class="ul-col-ref flex-shrink-0" style="width: 150px;">Internal Reference</div>
+                <div class="ul-col-name flex-grow-1 px-2">Product Name</div>
+                <div class="ul-col-stock flex-shrink-0" style="width: 80px;">Stock</div>
+                <div class="ul-col-price flex-shrink-0" style="width: 100px;">Price</div>
+                <div class="ul-col-desc flex-shrink-0" style="width: 250px;">Description</div>
+            </div>
+        </xpath>
+        <!-- Unconditionally apply flex layout for products to create a list view -->
+        <xpath expr="//div[@t-foreach='pos.productToDisplayByCateg']" position="attributes">
+            <attribute name="class"></attribute>
+            <attribute name="t-attf-class">product-list pt-0 pb-2 d-flex flex-column px-0</attribute>
+        </xpath>
+    </t>
+</templates>
