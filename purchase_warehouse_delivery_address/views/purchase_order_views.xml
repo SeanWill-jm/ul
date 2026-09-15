@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_form_warehouse_delivery_address" model="ir.ui.view">
+        <field name="name">purchase.order.form.warehouse.delivery.address</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='purchase_delivery_invoice']/group/group" position="inside">
+                <field name="warehouse_delivery_address_id"
+                       string="Delivery Address"
+                       readonly="1"
+                       options="{'no_create': True, 'no_open': False}"
+                       invisible="dest_address_id or not warehouse_delivery_address_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

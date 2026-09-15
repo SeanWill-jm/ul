@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_account_number" model="ir.ui.view">
+        <field name="name">res.partner.form.account.number</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group name="partner_account_identification"
+                       string="Account Identification">
+                    <group>
+                        <field name="customer_type"/>
+                        <field name="account_branch_id"
+                               options="{'no_create': True}"
+                               readonly="customer_account_suffix"/>
+                    </group>
+                    <group>
+                        <field name="customer_account_no"
+                               placeholder="e.g. 103-062001 or legacy 30007"
+                               readonly="customer_account_suffix"/>
+                        <field name="legacy_account_no"
+                               readonly="1"
+                               invisible="not legacy_account_no"/>
+                        <field name="customer_account_suffix" invisible="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_list_account_number" model="ir.ui.view">
+        <field name="name">res.partner.list.account.number</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="customer_account_no" optional="show"/>
+                <field name="customer_type" optional="show"/>
+                <field name="account_branch_id" optional="hide"/>
+                <field name="legacy_account_no" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_search_account_number" model="ir.ui.view">
+        <field name="name">res.partner.search.account.number</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="customer_account_no"/>
+                <field name="legacy_account_no"/>
+                <field name="customer_type"/>
+                <field name="account_branch_id"/>
+
+                <separator/>
+
+                <filter name="customer_type_customer"
+                        string="Customer Type: Customer"
+                        domain="[('customer_type', '=', 'customer')]"/>
+                <filter name="customer_type_vendor"
+                        string="Customer Type: Vendor"
+                        domain="[('customer_type', '=', 'vendor')]"/>
+                <filter name="customer_type_both"
+                        string="Customer Type: Customer &amp; Vendor"
+                        domain="[('customer_type', '=', 'both')]"/>
+                <separator/>
+                <filter name="has_legacy_account"
+                        string="Migrated (Legacy Account No.)"
+                        domain="[('legacy_account_no', '!=', False)]"/>
+
+                <group name="partner_account_group_by">
+                    <filter name="group_customer_type"
+                            string="Customer Type"
+                            context="{'group_by': 'customer_type'}"/>
+                    <filter name="group_account_branch"
+                            string="Account Branch"
+                            context="{'group_by': 'account_branch_id'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
