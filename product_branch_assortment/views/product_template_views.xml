@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Product form (also applies to the variant form, which inherits it in
+         primary mode). Anchors verified against 19.0 product/views/product_views.xml:
+         page[@name='general_information'] > group > group[@name='group_general']. -->
+    <record id="product_template_form_view_branch_assortment" model="ir.ui.view">
+        <field name="name">product.template.form.branch.assortment</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']//group[@name='group_general']" position="inside">
+                <field name="allowed_branch_ids"
+                       widget="many2many_tags"
+                       groups="base.group_multi_company"
+                       options="{'no_create': True, 'no_quick_create': True}"
+                       placeholder="All branches"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product list: optional column, hidden by default. -->
+    <record id="product_template_tree_view_branch_assortment" model="ir.ui.view">
+        <field name="name">product.template.list.branch.assortment</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="allowed_branch_ids"
+                       widget="many2many_tags"
+                       groups="base.group_multi_company"
+                       optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product search: filter restricted products and search by branch. -->
+    <record id="product_template_search_view_branch_assortment" model="ir.ui.view">
+        <field name="name">product.template.search.branch.assortment</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="allowed_branch_ids" groups="base.group_multi_company"/>
+                <filter string="Branch-restricted" name="filter_branch_restricted"
+                        domain="[('allowed_branch_ids', '!=', False)]"
+                        groups="base.group_multi_company"/>
+                <filter string="All branches" name="filter_all_branches"
+                        domain="[('allowed_branch_ids', '=', False)]"
+                        groups="base.group_multi_company"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
