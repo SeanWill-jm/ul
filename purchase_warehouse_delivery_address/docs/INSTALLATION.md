@@ -1,29 +1,31 @@
-# Installation — Odoo.sh 19.0
+# Installation / Upgrade — Odoo.sh 19.0
 
 ## Prerequisites
 
-- Odoo.sh 19.0 project.
-- Purchase and Inventory applications.
+- Odoo.sh 19.0 project, Purchase and Inventory.
 - Development or Staging branch.
 
-## Steps
+## Upgrade from 19.0.1.0.0 (Staging)
 
-1. Copy `purchase_warehouse_delivery_address` to `~/src/user/`.
-2. Commit and push:
+1. Copy `purchase_warehouse_delivery_address/` over the existing folder in `~/src/user/`.
+2. From the Odoo.sh shell:
+
+```bash
+odoo-bin -d $PGDATABASE -u purchase_warehouse_delivery_address --stop-after-init
+odoosh-restart http
+```
+
+3. Apps -> Purchase Delivery Address: version must read `19.0.1.0.4`.
+4. Commit and push when validated:
 
 ```bash
 cd ~/src/user
 git add purchase_warehouse_delivery_address
-git commit -m "Add Purchase Warehouse Delivery Address module"
-git push
+git commit -m "purchase_warehouse_delivery_address 19.0.1.0.4: tagged-contact, TAX ID label Delivery Address"
+git push https HEAD:test
 ```
 
-3. Wait for a green Odoo.sh build.
-4. Connect to the test database.
-5. Activate Developer Mode.
-6. Go to **Apps → Update Apps List → Update**.
-7. Search for **Purchase Warehouse Delivery Address**.
-8. Verify version `19.0.1.0.0`.
-9. Install/Activate.
+## Fresh install
 
-Install first in Development or Staging, not directly in Production.
+Apps -> Update Apps List -> search "Purchase Delivery Address" -> Install. Development or
+Staging first, never directly in Production.

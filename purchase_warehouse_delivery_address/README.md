@@ -1,50 +1,37 @@
-# Purchase Warehouse Delivery Address — Odoo.sh 19.0
+# Purchase Delivery Address — Odoo.sh 19.0
+
+(Technical name `purchase_warehouse_delivery_address`, kept from 19.0.1.0.0 so existing
+installations upgrade in place. The display name is now "Purchase Delivery Address".)
 
 ## Purpose
 
-This module implements the internal warehouse delivery scenario for Odoo Purchase Orders. It deliberately uses Odoo's standard **Deliver To** field instead of creating a second warehouse selector.
+Adds an editable **Delivery Address** (`purchase.order.po_delivery_address_id`) to RFQs and
+Purchase Orders.
 
-The selected receiving operation determines the warehouse, and the module resolves that warehouse's configured **Address**. It then:
+- The dropdown lists **only contacts tagged `PO Delivery Address`**.
+- **One contact at a time** (Many2one). It can be changed in any state.
+- It is printed as an **extra block** on the RFQ and Purchase Order PDFs (both 19.0 report
+  templates), shown on the vendor portal page, and available as an optional column, search
+  field and Group By in the RFQ/PO lists.
+- Empty = the documents print as standard Odoo does (standard Shipping address included).
+- When set, the standard **Shipping address** (Dropship) block is hidden and the vendor tax number prints as **TAX ID:** (1.0.4).
 
-1. displays a read-only **Delivery Address** on the Purchase Order form; and
-2. prints the address on the standard RFQ/Purchase Order PDF.
-
-This keeps the physical PO synchronized with the warehouse used by Odoo to create the incoming receipt.
+It does **not** change **Deliver To** (`picking_type_id`, the receiving operation), the
+**Dropship Address** (`dest_address_id`) or the receipt created on confirmation.
 
 ## Target
 
-- Odoo.sh
-- Odoo 19.0
-- Purchase + Inventory (`purchase_stock`)
-
-## Technical name
-
-`purchase_warehouse_delivery_address`
+Odoo.sh 19.0 — depends on `purchase_stock` (unchanged from 1.0.0).
 
 ## Version
 
-`19.0.1.0.0`
-
-## Core mapping
-
-`purchase.order.picking_type_id` → `stock.picking.type.warehouse_id` → `stock.warehouse.partner_id`
-
-The custom read-only field is:
-
-`purchase.order.warehouse_delivery_address_id`
-
-## Dropship compatibility
-
-Standard Odoo uses `dest_address_id` for dropship/customer delivery. This module does not replace or duplicate that flow. The internal warehouse address block is rendered only when there is no dropship address.
+`19.0.1.0.4` — (1.0.1 failed view validation on Staging, see `PATCH_NOTES_19.0.1.0.2.md`) replaces the read-only, warehouse-derived Delivery Address of 1.0.0.
+See `PATCH_NOTES_19.0.1.0.1.md`, `PATCH_NOTES_19.0.1.0.2.md`, `PATCH_NOTES_19.0.1.0.3.md`, `PATCH_NOTES_19.0.1.0.4.md` and `docs/`.
 
 ## Quick setup
 
-1. Install on an Odoo.sh Development/Staging branch.
-2. Configure every receiving warehouse's **Address**.
-3. Create an RFQ.
-4. Select **Deliver To**.
-5. Review the derived Delivery Address.
-6. Print the RFQ/PO and verify the address.
-7. Complete UAT before Production.
-
-See `docs/` for complete documentation.
+1. Upgrade the module on Staging (see `docs/INSTALLATION.md`).
+2. Open **Contacts**, edit each delivery site contact and add the tag **PO Delivery Address**.
+3. Create an RFQ, pick the contact in **Delivery Address** (under Currency).
+4. Print the RFQ / PO and check the block.
+5. Complete UAT before Production.

@@ -39,3 +39,18 @@ https://www.odoo.com/documentation/19.0/administration/odoo_sh/create_module.htm
 ## Odoo testing
 
 https://www.odoo.com/documentation/19.0/developer/reference/addons/testing.html
+
+## Added for 19.0.1.0.1 (read from the 19.0 branch source text)
+
+- RFQ/PO report templates and actions: `addons/purchase/report/purchase_order_templates.xml`
+  (`report_purchaseorder_document`), `addons/purchase/report/purchase_quotation_templates.xml`
+  (`report_purchasequotation_document`), `addons/purchase/report/purchase_reports.xml`
+  (`action_report_purchase_order`, `report_purchase_quotation`).
+  https://github.com/odoo/odoo/tree/19.0/addons/purchase/report
+- Portal: `addons/purchase/views/portal_templates.xml` (`purchase_order_portal_content`, `#informations`).
+- Form/list/search: `addons/purchase/views/purchase_views.xml` (`purchase_order_form`,
+  `purchase_order_view_tree`, `purchase_order_tree`, `view_purchase_order_filter`).
+- Callable `domain` on relational fields: `odoo/orm/fields_relational.py`.
+
+Evidence level: source text was read through a summarising fetch, not a checkout, and no Odoo 19
+database was available. Anchors are therefore "verified against source text", not runtime-validated.

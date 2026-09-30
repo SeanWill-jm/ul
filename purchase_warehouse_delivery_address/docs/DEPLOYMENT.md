@@ -1,22 +1,20 @@
-# Deployment Plan
+# Deployment Plan (19.0.1.0.1)
 
-## Development
+## Staging (1.0.0 already installed)
 
-Push the module, confirm a green build, update the Apps list, install, and perform initial testing.
-
-## Staging
-
-Use a production-data staging copy. Verify real warehouse addresses, execute all UAT cases, and obtain business approval.
+1. Copy the new `purchase_warehouse_delivery_address/` over the existing folder in
+   `~/src/user/` (files are live in the online editor, the schema is not).
+2. Upgrade: `odoo-bin -d $PGDATABASE -u purchase_warehouse_delivery_address --stop-after-init`
+   then `odoosh-restart http`.
+3. Optionally run the module tests, then tag the delivery contacts and run the UAT cases.
+4. Commit and push: `git push https HEAD:test`.
 
 ## Production
 
-1. Confirm current Odoo.sh backup.
-2. Merge the approved Git revision.
-3. Wait for successful build.
-4. Install/upgrade the module.
-5. Validate one known PO for each receiving warehouse.
-6. Print sample PDFs and compare with Staging.
+Only after UAT sign-off: confirm a current backup, merge the approved revision, wait for the
+build, upgrade the module, tag the production contacts, print one RFQ and one PO to compare
+with Staging.
 
 ## Post-deployment
 
-Verify Purchase Orders, Deliver To selection, RFQ/PO printing, receipt creation, and dropship behavior.
+Verify RFQ/PO printing, dropship POs, Deliver To, receipt creation and the vendor portal page.

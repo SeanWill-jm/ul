@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- noupdate: upgrades never rename or reset the tag; users may recolour it. -->
+    <data noupdate="1">
+        <record id="partner_category_po_delivery_address" model="res.partner.category">
+            <field name="name">PO Delivery Address</field>
+        </record>
+    </data>
+</odoo>

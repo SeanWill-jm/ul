@@ -1,31 +1,31 @@
-# Test and UAT Plan
+# Test and UAT Plan (19.0.1.0.1)
 
-## Automated tests
+## Automated tests (`tests/`, 17 cases, post_install)
 
-The included TransactionCase verifies:
+01 tag exists - 02 field is single stored editable Many2one - 03 old related field gone -
+04 domain lists only tagged contacts - 05 select/change/clear - 06 untagged rejected on create
+and write - 07 removing tag later does not block unrelated edits - 08 editable in every state -
+09 duplicate keeps address - 10 form view carries field - 11 PO report prints contact -
+12 RFQ report prints contact - 13 reports unchanged when empty - 14 Deliver To untouched - 15 vendor block prints `TAX ID:` once (both templates) - 16 no tax line without VAT - 17 shipping block hidden only when a Delivery Address is set.
 
-1. Delivery Address resolves from the warehouse selected by Deliver To.
-2. Changing Deliver To changes the derived Delivery Address.
-3. The field is a read-only related field through the expected model chain.
+Tests create their own throwaway contacts; no hardcoded real data.
 
-## UAT-01 — Warehouse A
+## UAT
 
-Select Warehouse A under Deliver To, confirm the Delivery Address, and print the RFQ. Expected: Warehouse A address prints.
+- UAT-01 Tag a contact; it appears in the dropdown; an untagged contact does not.
+- UAT-02 Select contact A on an RFQ; print via **Print -> Request for Quotation**; block shows.
+- UAT-03 Print via the PO action after confirmation; block shows.
+- UAT-04 Change to contact B on the confirmed PO; reprint shows B; chatter logs the change.
+- UAT-05 Clear the field; documents print as standard.
+- UAT-06 Dropship PO: "Shipping address" and "Delivery Address" both print, no overlap.
+- UAT-07 Vendor portal page shows the Delivery Address.
+- UAT-08 RFQ and PO lists: enable the optional column, search by address, Group By.
+- UAT-09 Company switcher narrowed: selectable contacts follow standard visibility.
+- UAT-10 Upgrade from 1.0.0: existing POs open, print, and show an empty Delivery Address.
 
-## UAT-02 — Warehouse B
-
-Change Deliver To to Warehouse B. Expected: displayed and printed address changes to Warehouse B.
-
-## UAT-03 — Receipt alignment
-
-Confirm the PO and open the generated Receipt. Expected: the receipt uses the same warehouse selected under Deliver To.
-
-## UAT-04 — Dropship
-
-Use a standard dropship purchase with Dropship Address. Expected: customer shipping address remains standard and the internal warehouse block is not duplicated.
-
-## UAT-05 — RFQ and PO printing
-
-Print once in RFQ stage and again after confirmation. Expected: correct Delivery Address on both documents.
+- UAT-11 (1.0.4) Vendor with a TRN/VAT: RFQ and PO print `TAX ID: <number>` once; no `VAT:` anywhere.
+- UAT-12 (1.0.4) PO with Dropship Address and no Delivery Address: standard Shipping address still prints.
+- UAT-13 (1.0.4) Same PO after choosing a Delivery Address: Shipping address gone, Delivery Address present; RFQ still shows Requested Ship Date.
+- UAT-14 (1.0.4) Vendor block still shows name, address, phone; send an RFQ email and check the attached PDF.
 
 All UAT cases must pass on Staging before Production.

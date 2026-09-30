@@ -1,17 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Form: same XML ID as 1.0.0 so the upgrade replaces the old view in place.
+         Anchor: first sub-group of the header group (left column: Vendor,
+         Vendor Reference, Currency). Structural, no field-based anchor. -->
     <record id="purchase_order_form_warehouse_delivery_address" model="ir.ui.view">
-        <field name="name">purchase.order.form.warehouse.delivery.address</field>
+        <field name="name">purchase.order.form.po.delivery.address</field>
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="priority">90</field>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='purchase_delivery_invoice']/group/group" position="inside">
-                <field name="warehouse_delivery_address_id"
-                       string="Delivery Address"
-                       readonly="1"
-                       options="{'no_create': True, 'no_open': False}"
-                       invisible="dest_address_id or not warehouse_delivery_address_id"/>
+            <xpath expr="//sheet/group/group[1]" position="inside">
+                <field name="po_delivery_address_id"
+                       context="{'show_address': 1}"
+                       options="{'always_reload': True, 'no_create': True, 'no_quick_create': True}"
+                       placeholder="Select a tagged delivery contact"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- RFQ list -->
+    <record id="purchase_order_view_tree_po_delivery_address" model="ir.ui.view">
+        <field name="name">purchase.order.list.po.delivery.address</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="po_delivery_address_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Purchase Order list -->
+    <record id="purchase_order_tree_po_delivery_address" model="ir.ui.view">
+        <field name="name">purchase.order.list.po.delivery.address.po</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="po_delivery_address_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Search: field + own Group By block (no dependence on existing group nodes).
+         19.0: <group> inside <search> takes no `string` attribute (RNG-validated). -->
+    <record id="view_purchase_order_filter_po_delivery_address" model="ir.ui.view">
+        <field name="name">purchase.order.search.po.delivery.address</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="po_delivery_address_id"/>
+                <group>
+                    <filter name="groupby_po_delivery_address"
+                            string="Delivery Address"
+                            context="{'group_by': 'po_delivery_address_id'}"/>
+                </group>
             </xpath>
         </field>
     </record>
