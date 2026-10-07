@@ -7,7 +7,7 @@ letting each branch sell and stock only the products assigned to it through a
 dedicated "Allowed Branches" field. Products are never hidden; the restriction
 is enforced on sales order lines, stock moves and reordering rules.
 """,
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "category": "Inventory/Inventory",
     "author": "SWIT Global Consultants",
     "website": "https://switconsulting.com",

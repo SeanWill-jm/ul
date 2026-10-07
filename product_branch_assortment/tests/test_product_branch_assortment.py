@@ -73,7 +73,7 @@ class TestProductBranchAssortment(TransactionCase):
 
     def _move(self, company, product, location_src, location_dest, **extra):
         vals = {
-            "name": product.display_name,
+            "description_picking": product.display_name,
             "company_id": company.id,
             "product_id": product.id,
             "product_uom_qty": 1,

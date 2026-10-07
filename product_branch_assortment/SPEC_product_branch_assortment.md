@@ -1,7 +1,7 @@
 # Functional Specification — Product Branch Assortment
 
 Client: Unique Living (Odoo.sh, Odoo 19.0, parent company with branches)
-Module: `product_branch_assortment` 19.0.1.0.1 (1.0.1 adds the default list favourite; see PATCH_NOTES_19.0.1.0.1.md)
+Module: `product_branch_assortment` 19.0.1.0.2 (1.0.1 default list favourite; 1.0.2 test fixture fix)
 Author: SWIT Global Consultants
 Date: 2026-09-16
 Status: specification approved in principle (defaults accepted 2026-09-16); build delivered for staging validation

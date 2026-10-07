@@ -109,6 +109,8 @@ odoo-bin -d $PGDATABASE -u product_branch_assortment --test-enable --test-tags /
 
 ## Release notes
 
+- **19.0.1.0.2** (2026-10-07) — tests only: `stock.move` fixture used the removed `name`
+  field; now `description_picking`. 1.0.1 upgrade validated on staging.
 - **19.0.1.0.1** (2026-09-23) — default "My branch's assortment" favourite on
   product lists, `in_branch_assortment` search field, in/outside filters,
   import template, tests 15–16. Static checks only.
