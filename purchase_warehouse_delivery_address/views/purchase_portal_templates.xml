@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vendor portal: extra row at the end of the #informations block
+         (verified id in purchase.purchase_order_portal_content, 19.0 source). -->
+    <template id="portal_purchase_order_po_delivery_address"
+              inherit_id="purchase.purchase_order_portal_content"
+              name="Purchase Order Portal - Delivery Address">
+        <xpath expr="//div[@id='informations']" position="inside">
+            <div class="row" t-if="order.po_delivery_address_id" id="po_delivery_address">
+                <div class="col-lg-6 mb-3">
+                    <strong class="d-block mb-1">Delivery Address:</strong>
+                    <address t-field="order.po_delivery_address_id"
+                             t-options='{"widget": "contact", "fields": ["name", "address", "phone"], "no_marker": True}'/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
