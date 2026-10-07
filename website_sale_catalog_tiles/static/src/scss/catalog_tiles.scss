@@ -1,0 +1,30 @@
+// Catalog-style tiles: keep the quantity picker and the Add button on one row
+// and make the picker usable on touch screens (reps on tablets).
+.o_wsct_action_row {
+    gap: .25rem;
+}
+.o_wsct_qty {
+    width: auto;
+    max-width: 8.5rem;
+
+    .o_wsct_qty_input {
+        width: 3rem;
+        min-width: 3rem;
+        padding-left: .25rem;
+        padding-right: .25rem;
+    }
+    .btn {
+        min-width: 2rem;
+    }
+}
+.o_wsct_add_btn .o_label {
+    @media (max-width: 991.98px) {
+        display: none; // icon-only on small tiles
+    }
+}
+.o_wsct_reference {
+    letter-spacing: .02em;
+}
+.o_wsct_on_hand {
+    line-height: 1.2;
+}

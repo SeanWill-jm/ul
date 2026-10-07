@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Reference + on-hand under the product name.
+         Anchor verified against 19.0 website_sale/views/product_tile_templates.xml:
+         h2.o_wsale_products_item_title inside div.o_wsale_product_information_text. -->
+    <template id="products_item_catalog_info" inherit_id="website_sale.products_item" name="Tile: reference and on-hand">
+        <xpath expr="//h2[hasclass('o_wsale_products_item_title')]" position="after">
+            <t t-set="tile_code" t-value="variant.default_code or product.default_code"/>
+            <div t-if="website.tile_show_reference and tile_code"
+                 class="o_wsct_reference small text-muted font-monospace text-break">
+                <span t-out="tile_code"/>
+            </div>
+            <t t-if="website._tile_can_show_on_hand()">
+                <t t-set="tile_stock" t-value="product._tile_on_hand_info(variant, website)"/>
+                <div t-if="tile_stock['is_storable']" class="o_wsct_on_hand small">
+                    <t t-if="tile_stock['free_qty'] &gt; 0">
+                        <span class="text-success">
+                            <i class="fa fa-check-circle" role="presentation"/>
+                            <t t-out="int(tile_stock['free_qty'])"/> On Hand
+                        </span>
+                    </t>
+                    <t t-else="">
+                        <span class="text-danger">
+                            <i class="fa fa-times-circle" role="presentation"/>
+                            0 On Hand<t t-if="tile_stock['allow_out_of_stock']"> · order anyway</t>
+                        </span>
+                    </t>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Quantity picker + Add to Cart.
+         Keeps the standard `class` attributes untouched and only ADDS a dynamic
+         `t-attf-class` (QWeb merges it with the static class). Never remove or
+         rewrite `class` on these nodes: other modules inherit this template with
+         hasclass() anchors (website_sale_comparison: //div[hasclass('o_wsale_product_action_row')],
+         priority 32) and would no longer find them (1.0.0 failed on Staging for that reason).
+         Replaces the standard single button. The -/+ anchors carry
+         `js_add_cart_json` (handled by website_sale's `onChangeQuantity`, which
+         looks for the input inside the closest `.input-group`), and the input is
+         named `add_qty`, which website_sale's `_updateRootProduct` reads from the
+         tile form before calling the cart service. No custom JS. -->
+    <template id="shop_product_buttons_catalog" inherit_id="website_sale.shop_product_buttons" name="Tile: quantity picker">
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="before">
+            <t t-if="website.tile_quantity_picker">
+                <t t-set="tile_stock" t-value="product._tile_on_hand_info(variant, website)"/>
+                <t t-set="tile_max"
+                   t-value="(tile_stock['is_storable'] and not tile_stock['allow_out_of_stock']) and int(tile_stock['free_qty']) or None"/>
+                <div class="o_wsct_qty input-group input-group-sm flex-nowrap me-1">
+                    <a href="#" role="button" aria-label="Remove one"
+                       name="remove_one"
+                       class="btn btn-outline-secondary js_add_cart_json px-2">
+                        <i class="fa fa-minus" role="presentation"/>
+                    </a>
+                    <input type="text" inputmode="numeric" name="add_qty"
+                           class="form-control text-center o_wsct_qty_input"
+                           aria-label="Quantity"
+                           value="1" data-min="1"
+                           t-att-data-max="tile_max"/>
+                    <a href="#" role="button" aria-label="Add one"
+                       name="add_one"
+                       class="btn btn-outline-secondary js_add_cart_json px-2">
+                        <i class="fa fa-plus" role="presentation"/>
+                    </a>
+                </div>
+            </t>
+        </xpath>
+        <!-- Never open the quantity dialog: the tile already has the quantity. -->
+        <xpath expr="//button[hasclass('o_wsale_product_btn_primary')]" position="attributes">
+            <attribute name="t-att-data-show-quantity">(not website.tile_quantity_picker) and is_view_active('website_sale.product_quantity')</attribute>
+            <attribute name="t-attf-class">{{ website.tile_quantity_picker and 'o_wsct_add_btn flex-shrink-0' or '' }}</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('o_wsale_product_action_row')]" position="attributes">
+            <attribute name="t-attf-class">{{ website.tile_quantity_picker and 'o_wsct_action_row d-flex align-items-center flex-nowrap' or '' }}</attribute>
+        </xpath>
+    </template>
+
+</odoo>

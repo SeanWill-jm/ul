@@ -1,0 +1,11 @@
+External ID,Name,Customer Type,Account Branch/External ID,Customer Account No.
+managemore_customer_001,ABC Hardware,Customer,,103-061900
+managemore_vendor_001,XYZ Supplies,Vendor,,101-061901
+managemore_both_001,Combined Customer Vendor,Customer & Vendor,,102-061902
+managemore_legacy_001,Legacy Five Digit (prefix from current company),Customer,,30007
+managemore_legacy_002,Legacy Dash Only (prefix from current company),Vendor,,-36798
+managemore_legacy_003,Legacy Assigned Prefix Kept,Customer,,101-36798
+managemore_legacy_004,Legacy Unassigned Prefix (replaced by current company),Customer,,100-36799
+managemore_legacy_005,Legacy Short Suffix With Prefix,Customer,,103-1234
+managemore_legacy_006,Legacy Prefix And Number Run Together,Customer,,10240048
+new_customer_001,New Customer,Customer,branch_external_id,
