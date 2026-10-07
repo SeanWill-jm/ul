@@ -1,5 +1,9 @@
 # Product Branch Assortment — Odoo.sh 19.0
 
+Version: 19.0.1.0.3 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants
+
+> In Odoo: Apps › this module's card › **Module Info** shows the same guide (`static/description/index.html`).
+
 Installable Odoo 19.0 module for multi-branch databases where **purchasing is
 central** (parent company) but **each branch sells and stocks only its own
 assortment**.
@@ -123,3 +127,7 @@ odoo-bin -d $PGDATABASE -u product_branch_assortment --test-enable --test-tags /
 - Odoo 19.0 documentation, *Multi-company*: https://www.odoo.com/documentation/19.0/applications/general/companies/multi_company.html
 - Odoo 19.0 documentation, *Companies / Branches*: https://www.odoo.com/documentation/19.0/applications/general/companies.html
 - Odoo 19.0 source: `addons/product/security/product_security.xml` (record rule `('company_id', 'parent_of', company_ids)`), `odoo/orm/models.py` (`check_company_domain_parent_of`, `_check_company`), `addons/sale/models/sale_order_line.py` (`_domain_product_id`), `addons/stock/models/stock_orderpoint.py` (`_get_orderpoint_products`).
+
+---
+License: LGPL-3 · Summary: central purchasing at the parent with per-branch sell/stock assortments · Platform Version: Odoo 19.0 (Odoo.sh) · Status: Staging validated (1.0.1); 1.0.3 docs only
+Copyright © 2026 SWIT Global Consultants — https://switconsulting.com · Created by: SWIT Global Consultants

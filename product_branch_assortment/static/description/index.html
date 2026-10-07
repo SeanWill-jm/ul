@@ -1,0 +1,53 @@
+<section style="max-width:960px;margin:0 auto;padding:16px;font-family:inherit;line-height:1.5">
+  <h1 style="margin-bottom:4px">Product Branch Assortment</h1>
+  <p style="color:#6c757d;font-size:90%">Version: 19.0.1.0.3 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants</p>
+
+  <h2>Purpose</h2>
+  <p>Lets the parent company buy every product centrally while each branch sells and stocks only the products assigned to it. Standard Odoo offers one Company field per product and it is either/or; this module adds a separate <strong>Allowed Branches</strong> list. Products are never hidden: a branch outside the list can still see the product, receive it in reports and transfers, but cannot sell it, receive it into its own stock or set a reordering rule for it. A branch that already holds stock may sell it down.</p>
+
+  <h2>What the module adds</h2>
+  <table style="width:100%;border-collapse:collapse" border="1" cellpadding="6">
+    <tr style="background:#f1f3f5"><th>Label</th><th>Where</th><th>Technical</th><th>Notes</th></tr>
+    <tr><td>Allowed Branches</td><td>Product form › General Information; product list (optional column); search</td><td><code>product.template.allowed_branch_ids</code></td><td>Branches only (never the parent). Empty = all branches. Importable.</td></tr>
+    <tr><td>In Current Branch's Assortment</td><td>Search field and filters</td><td><code>product.template.in_branch_assortment</code></td><td>Computed for the company selected in the switcher; drives the default list filter.</td></tr>
+    <tr><td>My branch's assortment</td><td>Favourite filter on product lists</td><td><code>ir.filters</code> (shared, default)</td><td>Applied by default; any user can remove it for the view; admins edit it under Settings › Technical › User-defined Filters.</td></tr>
+  </table>
+
+  <h2>Setup (Administrator)</h2>
+  <ol>
+    <li>Install the module (Apps › Product Branch Assortment). Requires Sales and Inventory.</li>
+    <li>Keep every product's <strong>Company</strong> set to the parent company or blank. That is what lets the parent purchase for all branches.</li>
+    <li>On branch-specific products, set <strong>Allowed Branches</strong>. Leave it empty on products every branch may sell.</li>
+    <li>Bulk: Inventory › Products › list › select › multi-edit Allowed Branches, or import a CSV with <code>id</code> (External ID) and <code>allowed_branch_ids</code> (branch names, comma-separated). A sample is in <code>migration_templates/</code>.</li>
+    <li>POS: use the standard Restrict Categories on each register; this module does not change POS.</li>
+  </ol>
+
+  <h2>User guide</h2>
+  <p><strong>Sales.</strong> The product picker on a quotation only proposes products in the order company's assortment. A product typed or imported outside it is refused with a message naming the product, the branch and the allowed branches.</p>
+  <p><strong>Inventory.</strong> Receipts, inbound transfers and positive adjustments into a branch outside the assortment are refused. Deliveries, internal relocations within the branch and customer returns always go through. Reordering rules for non-allowed products are refused and the Replenishment report does not propose them.</p>
+  <p><strong>Purchasing (parent).</strong> Unchanged: every product can be ordered at the parent.</p>
+  <p><strong>Everyone.</strong> Product lists open on "My branch's assortment". Click the chip to see all products; use the "In / Outside my branch's assortment" filters to switch.</p>
+
+  <h2>Behaviour and limits</h2>
+  <ul>
+    <li>A listed branch covers its sub-branches; the parent is always allowed.</li>
+    <li>Sell-down: a branch removed from a product keeps selling its on-hand stock; new receipts and reorders stop.</li>
+    <li>Assortment is per product, not per category. Products sold in two branches need both branches listed.</li>
+    <li>No record rule is added, so cross-branch reports, valuations and transfers keep working.</li>
+  </ul>
+
+  <h2>Tests and validation</h2>
+  <p>16 automated tests building a throwaway Parent / Branch A / Sub-branch / Branch B tree. 1.0.1 upgraded cleanly on Odoo.sh staging (2026-10-07); 1.0.2 fixed the test fixture for the 19.0 stock move model. Run: <code>odoo-bin -d $PGDATABASE -u product_branch_assortment --test-enable --test-tags /product_branch_assortment --stop-after-init</code>.</p>
+
+  <h2>Version history</h2>
+  <ul>
+    <li>19.0.1.0.3 (2026-10-07) — in-app documentation page; manifest no longer links to an external site; no functional change.</li>
+    <li>19.0.1.0.2 (2026-10-07) — tests only (stock.move fixture).</li>
+    <li>19.0.1.0.1 (2026-09-23) — default "My branch's assortment" favourite, search field and filters, import template.</li>
+    <li>19.0.1.0.0 (2026-09-16) — initial release: Allowed Branches, sales/stock/reorder enforcement, sell-down rule.</li>
+  </ul>
+
+  <hr/>
+  <p style="color:#6c757d;font-size:90%">License: LGPL-3 · Summary: central purchasing at the parent with per-branch sell/stock assortments · Platform Version: Odoo 19.0 (Odoo.sh) · Status: Staging validated (1.0.1); 1.0.3 static checks only<br/>
+  Copyright © 2026 SWIT Global Consultants — <a href="https://switconsulting.com">switconsulting.com</a> · Created by: SWIT Global Consultants</p>
+</section>

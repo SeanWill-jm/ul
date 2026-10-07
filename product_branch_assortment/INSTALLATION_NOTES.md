@@ -19,7 +19,7 @@ odoosh-restart http
 # tests
 odoo-bin -d $PGDATABASE -u product_branch_assortment --test-enable --test-tags /product_branch_assortment --stop-after-init
 # commit so the module survives the next rebuild
-cd ~/src/user && git add product_branch_assortment && git commit -m "Add product_branch_assortment 19.0.1.0.2" && git push https HEAD:test
+cd ~/src/user && git add product_branch_assortment && git commit -m "Add product_branch_assortment 19.0.1.0.3" && git push https HEAD:test
 ```
 
 See `product_branch_assortment/README.md` for the business rule, configuration

@@ -1,0 +1,48 @@
+<section style="max-width:960px;margin:0 auto;padding:16px;font-family:inherit;line-height:1.5">
+  <h1 style="margin-bottom:4px">eCommerce Catalog Tiles</h1>
+  <p style="color:#6c757d;font-size:90%">Version: 19.0.1.0.1 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants</p>
+
+  <h2>Purpose</h2>
+  <p>Gives the web shop's product grid the look of the Sales app's Catalog view: every product tile shows the internal reference (SKU), the on-hand quantity in the website's warehouse, and a quantity field with − / + buttons next to Add to Cart, so the quantity chosen on the tile goes straight into the cart with no pop-up. Each element can be switched on or off per website, and the on-hand quantity can be shown to logged-in customers only, which suits an invitation-only wholesale site.</p>
+
+  <h2>What the module adds</h2>
+  <table style="width:100%;border-collapse:collapse" border="1" cellpadding="6">
+    <tr style="background:#f1f3f5"><th>Label</th><th>Where</th><th>Technical</th><th>Notes</th></tr>
+    <tr><td>Show Internal Reference on Tiles</td><td>Website › Configuration › Settings › eCommerce › Catalog Tiles</td><td><code>website.tile_show_reference</code></td><td>Per website. Default on.</td></tr>
+    <tr><td>Quantity Picker on Tiles</td><td>same</td><td><code>website.tile_quantity_picker</code></td><td>Per website. Default on. Turns off the standard quantity pop-up for tile Add to Cart.</td></tr>
+    <tr><td>Show On-Hand Quantity on Tiles</td><td>same</td><td><code>website.tile_show_on_hand</code></td><td>Never / Logged-in customers only / Everyone. Default: logged-in only.</td></tr>
+    <tr><td>Tile elements</td><td>/shop, category pages, dynamic product snippets</td><td>inherits <code>website_sale.products_item</code> and <code>website_sale.shop_product_buttons</code></td><td>No custom JavaScript: uses the shop's own quantity and add-to-cart handlers.</td></tr>
+  </table>
+
+  <h2>Setup (Administrator)</h2>
+  <ol>
+    <li>Install the module (Apps › eCommerce Catalog Tiles). Requires Website, eCommerce and Inventory.</li>
+    <li>Website › Configuration › Settings: pick the website at the top, scroll to eCommerce › <strong>Catalog Tiles</strong>, set the three switches, Save. Repeat for each website.</li>
+    <li>Website › Configuration › Settings › Inventory: set the website's <strong>Warehouse</strong>; the on-hand figure is that warehouse's available quantity. Empty means all warehouses of the website's company.</li>
+    <li>Per product (Sales tab): "Sell when Out-of-Stock" and "Show availability Qty" keep their standard meaning; when out-of-stock sales are off, the tile picker's maximum is the available quantity.</li>
+  </ol>
+
+  <h2>User guide</h2>
+  <p><strong>Customers and sales reps on the shop.</strong> Under each product name: the SKU, then "7 On Hand" in green or "0 On Hand" in red ("· order anyway" when the product may be sold out of stock). Type a quantity or use − / +, then Add to Cart; the cart receives that quantity. Configurable products still open the standard configurator with the quantity passed in.</p>
+  <p><strong>Website editor.</strong> The usual tile options (columns, image ratio, description) still apply; the module's elements sit inside the standard tile and follow the theme.</p>
+
+  <h2>Behaviour and limits</h2>
+  <ul>
+    <li>Stock is read the same way as the standard product page (website warehouse), under a read-only elevated call because visitors cannot read stock records; only the rounded-down number is shown.</li>
+    <li>Stock is computed per tile; fine at the default products-per-page, revisit above ~40 per page.</li>
+    <li>The picker is not added to the product page, which already has one.</li>
+  </ul>
+
+  <h2>Tests and validation</h2>
+  <p>4 automated tests (HttpCase on /shop): stock helper, visibility policy, rendered tile, settings switches. Run: <code>odoo-bin -d $PGDATABASE -u website_sale_catalog_tiles --test-enable --test-tags /website_sale_catalog_tiles --stop-after-init</code>.</p>
+
+  <h2>Version history</h2>
+  <ul>
+    <li>19.0.1.0.1 (2026-10-07) — in-app documentation page; manifest no longer links to an external site; no functional change.</li>
+    <li>19.0.1.0.0 (2026-09-23) — initial release.</li>
+  </ul>
+
+  <hr/>
+  <p style="color:#6c757d;font-size:90%">License: LGPL-3 · Summary: shop tiles with SKU, on-hand quantity and a quantity picker next to Add to Cart · Platform Version: Odoo 19.0 (Odoo.sh) · Status: Static checks only; staging install pending<br/>
+  Copyright © 2026 SWIT Global Consultants — <a href="https://switconsulting.com">switconsulting.com</a> · Created by: SWIT Global Consultants</p>
+</section>

@@ -1,5 +1,9 @@
 # eCommerce Catalog Tiles — Odoo.sh 19.0
 
+Version: 19.0.1.0.1 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants
+
+> In Odoo: Apps › this module's card › **Module Info** shows the same guide (`static/description/index.html`).
+
 Gives the shop grid (`/shop`, category pages, dynamic product snippets, wishlist)
 the look of the Sales app's **Catalog** view that the client liked: on every
 product tile,
@@ -77,3 +81,7 @@ odoo-bin -d $PGDATABASE -u website_sale_catalog_tiles --test-enable --test-tags 
 
 - **19.0.1.0.0** (2026-09-23) — initial implementation. Static checks only;
   runtime installation and tests not yet run.
+
+---
+License: LGPL-3 · Summary: shop tiles with SKU, on-hand quantity and a quantity picker next to Add to Cart · Platform Version: Odoo 19.0 (Odoo.sh) · Status: Static checks only; staging install pending
+Copyright © 2026 SWIT Global Consultants — https://switconsulting.com · Created by: SWIT Global Consultants

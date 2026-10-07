@@ -1,0 +1,58 @@
+<section style="max-width:960px;margin:0 auto;padding:16px;font-family:inherit;line-height:1.5">
+  <h1 style="margin-bottom:4px">Partner Account Number</h1>
+  <p style="color:#6c757d;font-size:90%">Version: 19.0.1.0.9 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants</p>
+
+  <h2>Purpose</h2>
+  <p>Gives every customer and vendor a branch-prefixed account number in the form <code>PPP-NNNNNN</code>: <code>PPP</code> is the three-digit prefix of the branch (company) that owns the account, <code>NNNNNN</code> is a six-digit number that is unique across all branches. Numbers issued by Odoo start at <code>062001</code>; numbers migrated from ManageMore keep their value, normalised to the same format. Once issued, a number is never changed, reused or deleted.</p>
+
+  <h2>What the module adds</h2>
+  <table style="width:100%;border-collapse:collapse" border="1" cellpadding="6">
+    <tr style="background:#f1f3f5"><th>Label</th><th>Where</th><th>Technical</th><th>Notes</th></tr>
+    <tr><td>Customer Type</td><td>Contact form</td><td><code>res.partner.customer_type</code></td><td>Customer / Vendor / Customer &amp; Vendor. Selecting it issues the number when none is supplied. Classification only; does not change Odoo's customer/vendor ranks.</td></tr>
+    <tr><td>Customer Account No.</td><td>Contact form, list, search</td><td><code>res.partner.customer_account_no</code></td><td><code>PPP-NNNNNN</code>; unique in the database; format enforced.</td></tr>
+    <tr><td>Account Branch</td><td>Contact form</td><td><code>res.partner.account_branch_id</code></td><td>The branch whose prefix the number carries. Separate from Company, so visibility is unchanged. Locked after issue.</td></tr>
+    <tr><td>Legacy Account No.</td><td>Contact form (read-only)</td><td><code>res.partner.legacy_account_no</code></td><td>Original ManageMore value when normalisation was applied; audit only.</td></tr>
+    <tr><td>Account Prefix</td><td>Company form and list</td><td><code>res.company.partner_account_prefix</code></td><td>Exactly three digits; one prefix per branch.</td></tr>
+  </table>
+
+  <h2>Setup (Administrator)</h2>
+  <ol>
+    <li>Install the module (Apps › Partner Account Number).</li>
+    <li>Settings › Users &amp; Companies › Companies: open each branch that issues accounts and set <strong>Account Prefix</strong> (e.g. 101, 102, 103). A prefix can belong to one branch only.</li>
+    <li>Nothing else to configure. The global sequence (<code>partner.account.number</code>) is created by the module and starts at 062001.</li>
+  </ol>
+
+  <h2>User guide</h2>
+  <p><strong>Sales / Purchase users.</strong> On a new contact, pick a Customer Type and save: Odoo fills Customer Account No. with the next free number for the branch you are currently working in. To record an existing number, type it in Customer Account No. before saving; the branch is inferred from its prefix.</p>
+  <p><strong>Administrators.</strong> The number and its branch cannot be edited or cleared after saving, and a numbered contact cannot be deleted; archive it instead. Archived contacts still count for uniqueness. Contacts list and search have an Account No. column and filter; the Legacy Account No. filter lists migrated contacts.</p>
+
+  <h2>Imports (CSV)</h2>
+  <p>Columns: <code>External ID, Name, Customer Type, Account Branch/External ID, Customer Account No.</code> Rules applied on import:</p>
+  <ul>
+    <li>Canonical values (<code>103-061900</code>) are stored as they are.</li>
+    <li>Legacy values are normalised: a prefix that belongs to a branch is kept (<code>101-36798</code> → <code>101-036798</code>); a missing or unassigned prefix takes the <strong>company selected in the switcher while importing</strong> (<code>30007</code> → <code>103-030007</code> when importing in branch 103). Dash-less exports are split as prefix + suffix (<code>10240048</code> → <code>102-040048</code>). The original value goes to Legacy Account No.</li>
+    <li>Import each branch's legacy file while that branch is the current company.</li>
+    <li>A supplied Account Branch must match the prefix in the value; duplicates are rejected with the row number.</li>
+  </ul>
+
+  <h2>Behaviour and limits</h2>
+  <ul>
+    <li>If a migrated number occupies a future sequence value, the generator skips it.</li>
+    <li>Legacy numbers live in 000000–061999; new numbers start at 062001, so the two ranges never collide.</li>
+    <li>Uniqueness and prefix checks run globally, regardless of which companies the user has enabled.</li>
+  </ul>
+
+  <h2>Tests and validation</h2>
+  <p>18 automated tests (post-install, safe on real databases). 1.0.7 and 1.0.8 validated on Odoo.sh staging, 18/18. Run: <code>odoo-bin -d $PGDATABASE -u partner_account_number --test-enable --test-tags /partner_account_number --stop-after-init</code>.</p>
+
+  <h2>Version history</h2>
+  <ul>
+    <li>19.0.1.0.9 (2026-10-07) — in-app documentation page; manifest no longer links to an external site; no functional change.</li>
+    <li>19.0.1.0.8 (2026-09-03) — global uniqueness and prefix lookups run under read-only sudo.</li>
+    <li>19.0.1.0.7 — dash-less legacy values accepted. 1.0.6 — tests use runtime prefixes. 1.0.5 — prefix precedence corrected. 1.0.4 — legacy normalisation and Legacy Account No. 1.0.3 — structural view anchors. 1.0.0 — initial release.</li>
+  </ul>
+
+  <hr/>
+  <p style="color:#6c757d;font-size:90%">License: LGPL-3 · Summary: branch-prefixed, globally unique customer/vendor account numbers with ManageMore migration · Platform Version: Odoo 19.0 (Odoo.sh) · Status: Staging validated<br/>
+  Copyright © 2026 SWIT Global Consultants — <a href="https://switconsulting.com">switconsulting.com</a> · Created by: SWIT Global Consultants</p>
+</section>

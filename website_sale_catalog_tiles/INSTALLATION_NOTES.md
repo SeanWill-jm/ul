@@ -16,7 +16,7 @@ odoosh-restart http
 # tests
 odoo-bin -d $PGDATABASE -u website_sale_catalog_tiles --test-enable --test-tags /website_sale_catalog_tiles --stop-after-init
 # commit so the module survives the next rebuild
-cd ~/src/user && git add website_sale_catalog_tiles && git commit -m "Add website_sale_catalog_tiles 19.0.1.0.0" && git push https HEAD:test
+cd ~/src/user && git add website_sale_catalog_tiles && git commit -m "Add website_sale_catalog_tiles 19.0.1.0.1" && git push https HEAD:test
 ```
 
 Then follow `CONFIGURATION_RUNBOOK_unique_living_websites.md` (same folder as

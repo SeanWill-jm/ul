@@ -15,13 +15,13 @@ odoo-bin -d $PGDATABASE -u purchase_warehouse_delivery_address --stop-after-init
 odoosh-restart http
 ```
 
-3. Apps -> Purchase Delivery Address: version must read `19.0.1.0.4`.
+3. Apps -> Purchase Delivery Address: version must read `19.0.1.0.5`.
 4. Commit and push when validated:
 
 ```bash
 cd ~/src/user
 git add purchase_warehouse_delivery_address
-git commit -m "purchase_warehouse_delivery_address 19.0.1.0.4: tagged-contact, TAX ID label Delivery Address"
+git commit -m "purchase_warehouse_delivery_address 19.0.1.0.5: tagged-contact, TAX ID label Delivery Address"
 git push https HEAD:test
 ```
 

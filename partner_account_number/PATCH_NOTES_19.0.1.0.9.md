@@ -1,6 +1,6 @@
-# Patch notes — 19.0.1.0.1 (2026-10-07)
+# Patch notes — 19.0.1.0.9 (2026-10-07)
 
-Version: 19.0.1.0.1 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants
+Version: 19.0.1.0.9 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants
 
 Documentation release; no functional change.
 
@@ -14,7 +14,7 @@ Documentation release; no functional change.
   `MODULE_DOCUMENTATION_STANDARD.md` at the project folder root). The company URL now appears
   only in footer copyright lines.
 
-Upgrade: `odoo-bin -d $PGDATABASE -u website_sale_catalog_tiles --stop-after-init` then `odoosh-restart http`,
+Upgrade: `odoo-bin -d $PGDATABASE -u partner_account_number --stop-after-init` then `odoosh-restart http`,
 or Apps › Update Apps List. No schema change.
 
 ---

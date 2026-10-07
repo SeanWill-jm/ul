@@ -1,7 +1,7 @@
 {
     "name": "Partner Account Number",
     "summary": "Branch-prefixed, globally unique customer/vendor account numbers",
-    "version": "19.0.1.0.8",
+    "version": "19.0.1.0.9",
     "category": "Contacts",
     "author": "SWIT Global Consultants",
     "license": "LGPL-3",

@@ -12,10 +12,9 @@ The standard Deliver To (receiving operation) and Dropship Address are not
 changed. The technical name is kept from 19.0.1.0.0 so that existing
 installations upgrade in place.
 """,
-    "version": "19.0.1.0.4",
+    "version": "19.0.1.0.5",
     "category": "Purchases",
     "author": "SWIT Global Consultants",
-    "website": "https://switconsulting.com",
     "license": "LGPL-3",
     "depends": ["purchase_stock"],
     "data": [

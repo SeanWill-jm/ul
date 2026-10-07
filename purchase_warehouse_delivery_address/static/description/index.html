@@ -1,0 +1,50 @@
+<section style="max-width:960px;margin:0 auto;padding:16px;font-family:inherit;line-height:1.5">
+  <h1 style="margin-bottom:4px">Purchase Delivery Address</h1>
+  <p style="color:#6c757d;font-size:90%">Version: 19.0.1.0.5 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants</p>
+
+  <h2>Purpose</h2>
+  <p>Adds an editable <strong>Delivery Address</strong> to Requests for Quotation and Purchase Orders, chosen from contacts tagged <em>PO Delivery Address</em>, and prints it as a block on the RFQ and PO PDFs so the vendor knows where to ship. The standard Deliver To (receiving operation), Dropship Address and the receipt created on confirmation are not changed; when the field is empty the documents print exactly as standard Odoo does.</p>
+
+  <h2>What the module adds</h2>
+  <table style="width:100%;border-collapse:collapse" border="1" cellpadding="6">
+    <tr style="background:#f1f3f5"><th>Label</th><th>Where</th><th>Technical</th><th>Notes</th></tr>
+    <tr><td>Delivery Address</td><td>RFQ / PO form, left column under Currency; list (optional column); search and Group By</td><td><code>purchase.order.po_delivery_address_id</code></td><td>One contact at a time; only contacts carrying the tag; editable in every state; tracked in the chatter.</td></tr>
+    <tr><td>PO Delivery Address (tag)</td><td>Contacts › tags</td><td><code>res.partner.category</code>, XML ID <code>partner_category_po_delivery_address</code></td><td>Created by the module; not company-scoped.</td></tr>
+    <tr><td>Delivery Address block</td><td>RFQ PDF, PO PDF, vendor portal page</td><td>inherits both 19.0 purchase report templates and the portal content template</td><td>Name, address, phone. Shown next to the standard shipping block; the standard block is hidden when a Delivery Address is set (1.0.4).</td></tr>
+  </table>
+
+  <h2>Setup (Administrator)</h2>
+  <ol>
+    <li>Install the module (Apps › Purchase Delivery Address). Requires Purchase and Inventory.</li>
+    <li>Contacts: open each delivery site (warehouse, store, job site) and add the tag <strong>PO Delivery Address</strong>. Only tagged contacts appear in the dropdown.</li>
+    <li>No other configuration. Report layout follows the company's standard document layout.</li>
+  </ol>
+
+  <h2>User guide</h2>
+  <p><strong>Purchasing.</strong> On an RFQ, pick the site in <strong>Delivery Address</strong>. Print or email the RFQ / PO: the address block appears on the PDF and on the vendor's portal page. The field can be changed later, including on confirmed orders; the change is logged in the chatter.</p>
+  <p><strong>Administrators.</strong> Removing the tag from a contact later never blocks edits on orders that already reference it; the check only runs when the field is set or imported. The RFQ/PO lists can be grouped by Delivery Address.</p>
+
+  <h2>Imports (CSV)</h2>
+  <p>Column <code>Delivery Address</code> (or <code>po_delivery_address_id/id</code>) on purchase order imports; the referenced contact must carry the tag or the row is rejected.</p>
+
+  <h2>Behaviour and limits</h2>
+  <ul>
+    <li>Does not change where goods are received (Deliver To) or any stock move.</li>
+    <li>Email bodies are untouched; the PDF attachment carries the block.</li>
+    <li>Technical name <code>purchase_warehouse_delivery_address</code> kept from 1.0.0 so installations upgrade in place.</li>
+  </ul>
+
+  <h2>Tests and validation</h2>
+  <p>14 automated tests including PDF rendering of both report templates. 1.0.2 upgraded cleanly on Odoo.sh staging; 1.0.3 passed 14/14; 1.0.4 upgrade PASS with 17/17 (2026-09-30). Run: <code>odoo-bin -d $PGDATABASE -u purchase_warehouse_delivery_address --test-enable --test-tags /purchase_warehouse_delivery_address --stop-after-init</code>.</p>
+
+  <h2>Version history</h2>
+  <ul>
+    <li>19.0.1.0.5 (2026-10-07) — in-app documentation page; manifest no longer links to an external site; no functional change.</li>
+    <li>19.0.1.0.4 (2026-09-30) — report layout per client: TAX ID label, standard shipping block hidden when a Delivery Address is set.</li>
+    <li>19.0.1.0.3 — tests read order states from the field. 1.0.2 — search view fixed for 19.0. 1.0.1 — tag-driven editable address replaces the warehouse-derived one. 1.0.0 — initial release.</li>
+  </ul>
+
+  <hr/>
+  <p style="color:#6c757d;font-size:90%">License: LGPL-3 · Summary: tagged-contact Delivery Address on RFQs and POs, printed on the PDFs · Platform Version: Odoo 19.0 (Odoo.sh) · Status: Staging validated (1.0.4); UAT pending<br/>
+  Copyright © 2026 SWIT Global Consultants — <a href="https://switconsulting.com">switconsulting.com</a> · Created by: SWIT Global Consultants</p>
+</section>

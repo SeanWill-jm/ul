@@ -1,5 +1,9 @@
 # Partner Account Number — Odoo.sh 19.0
 
+Version: 19.0.1.0.9 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants
+
+> In Odoo: Apps › this module's card › **Module Info** shows the same guide (`static/description/index.html`).
+
 Installable Odoo 19.0 custom module for branch-prefixed Customer/Vendor account numbering.
 
 ## Approved numbering rule
@@ -145,3 +149,7 @@ The module contains Odoo tests covering branch inference, sequence skipping, glo
 **Odoo.sh / Odoo 19.0**
 
 Odoo Online does not support arbitrary custom Python modules.
+
+---
+License: LGPL-3 · Summary: branch-prefixed, globally unique customer/vendor account numbers with ManageMore migration · Platform Version: Odoo 19.0 (Odoo.sh) · Status: Staging validated (1.0.8); 1.0.9 docs only
+Copyright © 2026 SWIT Global Consultants — https://switconsulting.com · Created by: SWIT Global Consultants

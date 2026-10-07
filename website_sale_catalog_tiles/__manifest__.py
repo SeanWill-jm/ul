@@ -12,7 +12,6 @@ per website, and the on-hand quantity can be limited to logged-in customers
     "version": "19.0.1.0.1",
     "category": "Website/eCommerce",
     "author": "SWIT Global Consultants",
-    "website": "https://switconsulting.com",
     "license": "LGPL-3",
     "depends": ["website_sale_stock"],
     "data": [

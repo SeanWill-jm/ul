@@ -1,5 +1,9 @@
 # Purchase Delivery Address — Odoo.sh 19.0
 
+Version: 19.0.1.0.5 · Last Updated: 2026-10-07 · Copyright © 2026 SWIT Global Consultants · Created by: SWIT Global Consultants
+
+> In Odoo: Apps › this module's card › **Module Info** shows the same guide (`static/description/index.html`).
+
 (Technical name `purchase_warehouse_delivery_address`, kept from 19.0.1.0.0 so existing
 installations upgrade in place. The display name is now "Purchase Delivery Address".)
 
@@ -35,3 +39,7 @@ See `PATCH_NOTES_19.0.1.0.1.md`, `PATCH_NOTES_19.0.1.0.2.md`, `PATCH_NOTES_19.0.
 3. Create an RFQ, pick the contact in **Delivery Address** (under Currency).
 4. Print the RFQ / PO and check the block.
 5. Complete UAT before Production.
+
+---
+License: LGPL-3 · Summary: tagged-contact Delivery Address on RFQs and POs, printed on the PDFs · Platform Version: Odoo 19.0 (Odoo.sh) · Status: Staging validated (1.0.4); UAT pending
+Copyright © 2026 SWIT Global Consultants — https://switconsulting.com · Created by: SWIT Global Consultants
