@@ -52,6 +52,14 @@ The product pickers on sales order lines only propose products in the
 assortment of the order's company. This is a filter, not the safeguard: the
 constraints above are.
 
+Product lists open with the shared favourite **My branch's assortment**
+applied (since 1.0.1): a branch user sees only products the current company
+may sell/stock; the parent company sees everything. Remove the favourite chip
+to see all products, or use the "In / Outside my branch's assortment" filters.
+Administrators can edit or disable the favourite under Settings › Technical ›
+User-defined Filters; it is stored with `noupdate`, so such edits survive
+upgrades.
+
 ### POS
 
 Not customised. Use the standard **Restrict Categories** option on each POS
@@ -65,7 +73,7 @@ must therefore map to POS categories.
 2. On every product keep **Company** = parent company or blank.
 3. Set **Allowed Branches** on the products that are branch-specific. Leave
    it empty on products every branch may sell.
-4. Bulk maintenance: Inventory › Products › list view › select › multi-edit
+4. Bulk maintenance (sample: `migration_templates/product_assortment_import_template.csv`): Inventory › Products › list view › select › multi-edit
    **Allowed Branches**, or import a CSV with columns
    `External ID`/`Internal Reference` and `Allowed Branches` (branch names
    separated by commas, or external IDs via `Allowed Branches/External ID`).
@@ -89,7 +97,7 @@ they are edited; archive them).
 
 ## Tests
 
-`tests/test_product_branch_assortment.py` — 14 tests building a throwaway
+`tests/test_product_branch_assortment.py` — 16 tests building a throwaway
 Parent / Branch A / Sub-branch A1 / Branch B tree at runtime, safe on real
 databases (everything is rolled back).
 
@@ -101,6 +109,9 @@ odoo-bin -d $PGDATABASE -u product_branch_assortment --test-enable --test-tags /
 
 ## Release notes
 
+- **19.0.1.0.1** (2026-09-23) — default "My branch's assortment" favourite on
+  product lists, `in_branch_assortment` search field, in/outside filters,
+  import template, tests 15–16. Static checks only.
 - **19.0.1.0.0** (2026-09-16) — initial implementation. Static checks only
   (Python syntax, XML well-formedness, XPath anchors compared with 19.0
   source); runtime installation and tests not yet run.

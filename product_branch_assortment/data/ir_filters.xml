@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Shared favourites (no user, no action): applied by default on every
+         product list, removable by any user for the current view, and editable
+         by administrators under Settings › Technical › User-defined Filters.
+         noupdate so client edits survive module upgrades. -->
+    <data noupdate="1">
+        <record id="ir_filters_product_template_branch_assortment" model="ir.filters">
+            <field name="name">My branch's assortment</field>
+            <field name="model_id">product.template</field>
+            <field name="domain">[('in_branch_assortment', '=', True)]</field>
+            <field name="context">{}</field>
+            <field name="is_default" eval="True"/>
+        </record>
+        <record id="ir_filters_product_product_branch_assortment" model="ir.filters">
+            <field name="name">My branch's assortment</field>
+            <field name="model_id">product.product</field>
+            <field name="domain">[('in_branch_assortment', '=', True)]</field>
+            <field name="context">{}</field>
+            <field name="is_default" eval="True"/>
+        </record>
+    </data>
+</odoo>

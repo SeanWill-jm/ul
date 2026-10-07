@@ -42,6 +42,13 @@
         <field name="arch" type="xml">
             <xpath expr="//search" position="inside">
                 <field name="allowed_branch_ids" groups="base.group_multi_company"/>
+                <filter string="In my branch's assortment" name="filter_in_branch_assortment"
+                        domain="[('in_branch_assortment', '=', True)]"
+                        groups="base.group_multi_company"/>
+                <filter string="Outside my branch's assortment" name="filter_outside_branch_assortment"
+                        domain="[('in_branch_assortment', '=', False)]"
+                        groups="base.group_multi_company"/>
+                <separator/>
                 <filter string="Branch-restricted" name="filter_branch_restricted"
                         domain="[('allowed_branch_ids', '!=', False)]"
                         groups="base.group_multi_company"/>

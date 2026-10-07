@@ -23,6 +23,30 @@ class ProductTemplate(models.Model):
         ),
     )
 
+    in_branch_assortment = fields.Boolean(
+        string="In Current Branch's Assortment",
+        compute="_compute_in_branch_assortment",
+        search="_search_in_branch_assortment",
+        help="True when the company currently selected in the company switcher "
+        "may sell and stock this product. Used by the default list filter.",
+    )
+
+    @api.depends_context("company")
+    @api.depends("allowed_branch_ids")
+    def _compute_in_branch_assortment(self):
+        company = self.env.company
+        for template in self:
+            template.in_branch_assortment = template._is_allowed_for_company(company)
+
+    @api.model
+    def _search_in_branch_assortment(self, operator, value):
+        if operator not in ("=", "!="):
+            raise NotImplementedError(_("Unsupported operator %s", operator))
+        domain = self._branch_assortment_domain(self.env.company)
+        if (operator == "=") == bool(value):
+            return domain
+        return ["!"] + domain
+
     # ------------------------------------------------------------------
     # Constraints
     # ------------------------------------------------------------------

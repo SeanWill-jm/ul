@@ -200,3 +200,27 @@ class TestProductBranchAssortment(TransactionCase):
         self.assertIn(self.product_a_only, Orderpoint.with_company(self.branch_a)._get_orderpoint_products())
         self.assertNotIn(self.product_a_only, Orderpoint.with_company(self.branch_b)._get_orderpoint_products())
         self.assertIn(self.product_a_only, Orderpoint.with_company(self.parent)._get_orderpoint_products())
+
+    # ------------------------------------------------------------------
+    # 15-16 default list filter (19.0.1.0.1)
+    # ------------------------------------------------------------------
+    def test_15_in_branch_assortment_search_and_compute(self):
+        Product = self.env["product.product"]
+        both = self.product_a_only | self.product_free
+        for company, expected in (
+            (self.branch_a, both), (self.sub_a1, both), (self.parent, both), (self.branch_b, self.product_free),
+        ):
+            P = Product.with_company(company)
+            found = P.search([("id", "in", both.ids), ("in_branch_assortment", "=", True)])
+            self.assertEqual(found, expected, company.name)
+            outside = P.search([("id", "in", both.ids), ("in_branch_assortment", "=", False)])
+            self.assertEqual(outside, both - expected, company.name)
+            for product in both:
+                self.assertEqual(P.browse(product.id).in_branch_assortment, product in expected)
+
+    def test_16_default_shared_filters_exist(self):
+        for model in ("product.template", "product.product"):
+            filters = self.env["ir.filters"].search([("model_id", "=", model), ("is_default", "=", True), ("user_ids", "=", False)])
+            self.assertTrue(filters, model)
+            self.assertIn("in_branch_assortment", filters[0].domain)
+
